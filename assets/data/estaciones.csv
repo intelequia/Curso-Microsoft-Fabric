@@ -1,0 +1,73 @@
+estacion_id,nombre_estacion,provincia,comunidad,tipo,fecha_apertura
+1,Aurora Madrid 01,Madrid,Comunidad de Madrid,gasolinera,2022-06-24
+2,Aurora Madrid 02,Madrid,Comunidad de Madrid,multi,2022-06-13
+3,Aurora Madrid 03,Madrid,Comunidad de Madrid,gasolinera,2020-10-23
+4,Aurora Madrid 04,Madrid,Comunidad de Madrid,gasolinera,2019-07-14
+5,Aurora Madrid 05,Madrid,Comunidad de Madrid,gasolinera,2023-03-17
+6,Aurora Barcelona 01,Barcelona,Cataluña,gasolinera,2018-12-05
+7,Aurora Barcelona 02,Barcelona,Cataluña,gasolinera,2020-09-19
+8,Aurora Barcelona 03,Barcelona,Cataluña,ev_charger,2022-11-28
+9,Aurora Barcelona 04,Barcelona,Cataluña,gasolinera,2021-02-17
+10,Aurora Barcelona 05,Barcelona,Cataluña,multi,2019-11-30
+11,Aurora Sevilla 01,Sevilla,Andalucía,ev_charger,2019-12-27
+12,Aurora Sevilla 02,Sevilla,Andalucía,gasolinera,2023-12-30
+13,Aurora Málaga 01,Málaga,Andalucía,gasolinera,2018-02-15
+14,Aurora Málaga 02,Málaga,Andalucía,ev_charger,2019-09-21
+15,Aurora Málaga 03,Málaga,Andalucía,gasolinera,2019-12-30
+16,Aurora Málaga 04,Málaga,Andalucía,gasolinera,2018-05-22
+17,Aurora Málaga 05,Málaga,Andalucía,multi,2023-12-21
+18,Aurora Valencia 01,Valencia,Comunidad Valenciana,gasolinera,2018-07-15
+19,Aurora Valencia 02,Valencia,Comunidad Valenciana,multi,2023-11-12
+20,Aurora Valencia 03,Valencia,Comunidad Valenciana,ev_charger,2019-02-26
+21,Aurora Zaragoza 01,Zaragoza,Aragón,ev_charger,2022-12-24
+22,Aurora Zaragoza 02,Zaragoza,Aragón,gasolinera,2018-01-20
+23,Aurora Zaragoza 03,Zaragoza,Aragón,gasolinera,2022-03-26
+24,Aurora Zaragoza 04,Zaragoza,Aragón,multi,2020-10-19
+25,Aurora Zaragoza 05,Zaragoza,Aragón,gasolinera,2020-09-04
+26,Aurora Murcia 01,Murcia,Región de Murcia,gasolinera,2022-09-24
+27,Aurora Murcia 02,Murcia,Región de Murcia,gasolinera,2018-03-01
+28,Aurora Murcia 03,Murcia,Región de Murcia,gasolinera,2020-02-27
+29,Aurora Bilbao 01,Bilbao,País Vasco,gasolinera,2019-01-31
+30,Aurora Bilbao 02,Bilbao,País Vasco,multi,2019-11-19
+31,Aurora Granada 01,Granada,Andalucía,gasolinera,2023-10-01
+32,Aurora Granada 02,Granada,Andalucía,gasolinera,2021-09-01
+33,Aurora Granada 03,Granada,Andalucía,gasolinera,2020-02-16
+34,Aurora Santa Cruz de Tenerife 01,Santa Cruz de Tenerife,Canarias,gasolinera,2022-06-07
+35,Aurora Santa Cruz de Tenerife 02,Santa Cruz de Tenerife,Canarias,multi,2019-05-10
+36,Aurora Santa Cruz de Tenerife 03,Santa Cruz de Tenerife,Canarias,gasolinera,2019-03-10
+37,Aurora Santa Cruz de Tenerife 04,Santa Cruz de Tenerife,Canarias,gasolinera,2019-12-13
+38,Aurora Santa Cruz de Tenerife 05,Santa Cruz de Tenerife,Canarias,gasolinera,2021-07-19
+39,Aurora Santa Cruz de Tenerife 06,Santa Cruz de Tenerife,Canarias,gasolinera,2020-05-21
+40,Aurora Las Palmas 01,Las Palmas,Canarias,gasolinera,2021-02-14
+41,Aurora Las Palmas 02,Las Palmas,Canarias,ev_charger,2022-02-20
+42,Aurora Las Palmas 03,Las Palmas,Canarias,gasolinera,2020-06-14
+43,Aurora Las Palmas 04,Las Palmas,Canarias,gasolinera,2023-08-09
+44,Aurora Las Palmas 05,Las Palmas,Canarias,multi,2019-02-22
+45,Aurora Palma 01,Palma,Islas Baleares,multi,2019-12-04
+46,Aurora Palma 02,Palma,Islas Baleares,gasolinera,2019-01-24
+47,Aurora Palma 03,Palma,Islas Baleares,gasolinera,2022-05-11
+48,Aurora Palma 04,Palma,Islas Baleares,ev_charger,2019-06-29
+49,Aurora Palma 05,Palma,Islas Baleares,gasolinera,2021-07-26
+50,Aurora Palma 06,Palma,Islas Baleares,multi,2023-05-29
+51,Aurora Valladolid 01,Valladolid,Castilla y León,gasolinera,2023-01-13
+52,Aurora Valladolid 02,Valladolid,Castilla y León,gasolinera,2020-08-10
+53,Aurora Vigo 01,Vigo,Galicia,gasolinera,2018-02-24
+54,Aurora Vigo 02,Vigo,Galicia,gasolinera,2019-05-24
+55,Aurora Vigo 03,Vigo,Galicia,gasolinera,2022-10-22
+56,Aurora Vigo 04,Vigo,Galicia,multi,2018-11-22
+57,Aurora Vigo 05,Vigo,Galicia,gasolinera,2022-03-15
+58,Aurora Vigo 06,Vigo,Galicia,gasolinera,2020-04-07
+59,Aurora Alicante 01,Alicante,Comunidad Valenciana,gasolinera,2018-06-05
+60,Aurora Alicante 02,Alicante,Comunidad Valenciana,gasolinera,2022-12-23
+61,Aurora Alicante 03,Alicante,Comunidad Valenciana,ev_charger,2021-09-08
+62,Aurora Cádiz 01,Cádiz,Andalucía,gasolinera,2018-06-12
+63,Aurora Cádiz 02,Cádiz,Andalucía,gasolinera,2022-08-27
+64,Aurora Cádiz 03,Cádiz,Andalucía,ev_charger,2021-03-27
+65,Aurora Córdoba 01,Córdoba,Andalucía,gasolinera,2021-09-18
+66,Aurora Córdoba 02,Córdoba,Andalucía,gasolinera,2020-04-23
+67,Aurora Toledo 01,Toledo,Castilla-La Mancha,gasolinera,2020-10-14
+68,Aurora Toledo 02,Toledo,Castilla-La Mancha,multi,2020-06-30
+69,Aurora Toledo 03,Toledo,Castilla-La Mancha,ev_charger,2022-04-12
+70,Aurora Toledo 04,Toledo,Castilla-La Mancha,gasolinera,2020-01-22
+71,Aurora Toledo 05,Toledo,Castilla-La Mancha,gasolinera,2018-01-25
+72,Aurora Toledo 06,Toledo,Castilla-La Mancha,gasolinera,2023-07-07
