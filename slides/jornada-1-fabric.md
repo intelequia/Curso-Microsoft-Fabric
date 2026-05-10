@@ -609,15 +609,15 @@ Novedad clave que a menudo se pasa por alto: cross-database queries. Desde el Wa
 ## Modelando el `gold` de Aurora
 
 ```sql
-CREATE TABLE dim_cliente   (cliente_id INT, nombre NVARCHAR(150),
-                            segmento NVARCHAR(20), pais NVARCHAR(50),
+CREATE TABLE dim_cliente   (cliente_id INT, nombre VARCHAR(150),
+                            segmento VARCHAR(20), pais VARCHAR(50),
                             fecha_alta DATE);
 
-CREATE TABLE dim_producto  (producto_id INT, nombre NVARCHAR(150),
-                            categoria NVARCHAR(50), unidad NVARCHAR(20));
+CREATE TABLE dim_producto  (producto_id INT, nombre VARCHAR(150),
+                            categoria VARCHAR(50), unidad VARCHAR(20));
 
-CREATE TABLE dim_estacion  (estacion_id INT, nombre NVARCHAR(150),
-                            provincia NVARCHAR(50), tipo NVARCHAR(30));
+CREATE TABLE dim_estacion  (estacion_id INT, nombre VARCHAR(150),
+                            provincia VARCHAR(50), tipo VARCHAR(30));
 
 CREATE TABLE dim_tiempo    (fecha DATE, anio INT, mes INT, dia INT,
                             trimestre INT, dia_semana INT);
