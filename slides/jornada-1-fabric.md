@@ -65,6 +65,16 @@ Leer los objetivos en voz alta y pedir que los apunten. Avisar: al final de cada
 <!--
 Recorrer la agenda módulo a módulo. Descanso fijo a mitad: aproximadamente a las 2h de empezar. Las demos son en vivo — si algo falla en producción hay capturas de pantalla de respaldo. Los ejercicios para casa están en la carpeta ejercicios/jornada-1/. Preguntar: ¿hay algún bloque que les interese especialmente para hacer hincapié?
 -->
+---
+## Antes de empezar
+
+Todo el contenido del curso está en https://github.com/intelequia/Curso-Microsoft-Fabric
+
+1. Lee [requisitos.md](requisitos.md) y prepara tu equipo con todo lo indicado **antes** de la primera jornada.
+2. Sigue [00-preparacion-entorno.md](00-preparacion-entorno.md) para crear tu trial de Microsoft Fabric. Si tu organización ya dispone de capacidad Fabric, hablamos en el primer bloque sobre cómo solicitarte un workspace propio.
+3. Descarga la carpeta [assets/data](assets/data) en local: la usarás en varios ejercicios.
+
+*NOTA*: para los que no les haya dado tiempo, hemos preparado un tenant auroraenergiasl.onmicrosoft.com, con credenciales para todos.
 
 ---
 
