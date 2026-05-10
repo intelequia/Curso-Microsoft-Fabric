@@ -609,8 +609,9 @@ Novedad clave que a menudo se pasa por alto: cross-database queries. Desde el Wa
 ## Modelando el `gold` de Aurora
 
 ```sql
-CREATE TABLE dim_cliente   (cliente_id INT, nombre VARCHAR(150),
-                            segmento VARCHAR(20), pais VARCHAR(50),
+CREATE TABLE dim_cliente   (cliente_id INT, nombre_cliente VARCHAR(150),
+                            email VARCHAR(150), dominio_email VARCHAR(100),
+                            segmento VARCHAR(20), 
                             fecha_alta DATE);
 
 CREATE TABLE dim_producto  (producto_id INT, nombre VARCHAR(150),
@@ -640,7 +641,7 @@ CREATE OR ALTER PROCEDURE sp_load_dim_cliente AS
 BEGIN
   TRUNCATE TABLE dim_cliente;
   INSERT INTO dim_cliente
-  SELECT cliente_id, nombre, segmento, pais, fecha_alta
+  SELECT cliente_id, nombre_cliente, email, dominio_email, segmento, fecha_alta
   FROM lh_aurora.dbo.clientes;     -- cross-DB al Lakehouse
 END;
 ```

@@ -23,9 +23,10 @@
 -- Dimensiones
 CREATE TABLE dim_cliente (
   cliente_id   INT          NOT NULL,
-  nombre       VARCHAR(150),
+  nombre_cliente       VARCHAR(150),
+  email        VARCHAR(150),
+  dominio_email VARCHAR(100),
   segmento     VARCHAR(20),
-  pais         VARCHAR(50),
   fecha_alta   DATE
 );
 
