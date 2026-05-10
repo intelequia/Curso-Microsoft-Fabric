@@ -617,15 +617,20 @@ CREATE TABLE dim_cliente   (cliente_id INT, nombre_cliente VARCHAR(150),
 CREATE TABLE dim_producto  (producto_id INT, nombre VARCHAR(150),
                             categoria VARCHAR(50), unidad VARCHAR(20));
 
-CREATE TABLE dim_estacion  (estacion_id INT, nombre VARCHAR(150),
-                            provincia VARCHAR(50), tipo VARCHAR(30));
+CREATE TABLE dim_estacion  (estacion_id INT, nombre_estacion VARCHAR(150),
+                            provincia VARCHAR(50), comunidad VARCHAR(50), 
+                            tipo VARCHAR(30), fecha_apertura DATE);
 
 CREATE TABLE dim_tiempo    (fecha DATE, anio INT, mes INT, dia INT,
                             trimestre INT, dia_semana INT);
 
-CREATE TABLE fact_ventas   (venta_id BIGINT, fecha DATE,
-                            cliente_id INT, producto_id INT, estacion_id INT,
-                            cantidad DECIMAL(12,3), importe DECIMAL(12,2));
+CREATE TABLE dbo.fact_ventas (
+    transaccion_id BIGINT NOT NULL, fecha_id INT NOT NULL,   -- yyyymmdd derivado de fecha_venta
+    fecha_venta DATETIME2(6) NOT NULL, cliente_id INT NULL,  -- TRY_CAST → NULL en ventas anónimas
+    producto_id INT NOT NULL, estacion_id INT NOT NULL,
+    cantidad DECIMAL(12,3) NOT NULL, precio_unitario DECIMAL(10,4) NOT NULL,
+    importe  DECIMAL(14,2) NOT NULL, canal VARCHAR(20)   NOT NULL    -- 'pos' / 'app' / 'web'
+);
 ```
 
 <!--
