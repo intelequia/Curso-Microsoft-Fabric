@@ -37,7 +37,7 @@ Este documento detalla **todo lo que necesita tener instalado y configurado el a
 | --- | --- | --- |
 | **Power BI Desktop** | Última versión (release mensual) | Construir modelos semánticos, conectarse a Direct Lake, publicar reportes. [Descarga](https://powerbi.microsoft.com/desktop/). |
 | **Visual Studio Code** | Última | Editar SQL, KQL, notebooks, ver/modificar los assets del curso. [Descarga](https://code.visualstudio.com/). |
-| Extensiones de VS Code | — | `ms-mssql.mssql` (T-SQL), `ms-toolsai.jupyter` (notebooks), `rusty-fern.kusto` o `synapsesql.sql-bindings-vscode-extension` (KQL si está disponible), `ms-python.python`. |
+| Extensiones de VS Code | — | `ms-mssql.mssql` (T-SQL), `ms-toolsai.jupyter` (notebooks), `fabric.vscode-fabric` (Microsoft Fabric),  `SynapseVSCode.synapse` (Fabric Data Engineering VS Code), `ms-python.python`. |
 | **Git** | 2.40+ | Clonar este repositorio. [Descarga](https://git-scm.com/downloads). |
 | **OneLake File Explorer** (Windows) | Última | Acceder a OneLake como si fuera OneDrive. [Descarga](https://www.microsoft.com/en-us/download/details.aspx?id=105222). En macOS no está disponible: usaremos la web. |
 
@@ -46,14 +46,14 @@ Este documento detalla **todo lo que necesita tener instalado y configurado el a
 | Herramienta | Para qué se usa |
 | --- | --- |
 | **Azure Storage Explorer** | Inspeccionar OneLake vía endpoint ABFS si quieres profundizar. |
-| **Azure Data Studio** o **SQL Server Management Studio (SSMS)** | Cliente alternativo para conectarse al SQL endpoint de Lakehouse/Warehouse. |
+| **Azure Data Studio** o **SQL Server Management Studio (SSMS)** | Clientes alternativos para conectarse al SQL endpoint de Lakehouse/Warehouse. Azure Data Studio ha sido descontinuado el 28 febrero 2026 en favor de VS Code con la extensión de MSSQL.  |
 | **Microsoft Purview Data Map cliente** (web) | Solo navegador, sin instalación. |
 | **Python 3.11+** local con `pandas`, `pyarrow`, `azure-identity` | Si quieres ejecutar notebooks fuera de Fabric. No imprescindible. |
 | **Microsoft Teams** | Canal de soporte entre jornadas (si el formador lo habilita). |
 
 ## 4. Datos
 
-Descarga la carpeta [assets/data](assets/data) de este repositorio en una ruta local que recuerdes (por ejemplo `~/curso-fabric/data`). Verás los siguientes ficheros:
+Descarga la carpeta [assets/data](assets/data) de este repositorio en una ruta local que recuerdes (por ejemplo `~/data`). Verás los siguientes ficheros:
 
 - `clientes.csv` — Maestro de clientes ficticios de Aurora Energía.
 - `productos.csv` — Catálogo de productos (combustibles, electricidad, gas, lubricantes).
