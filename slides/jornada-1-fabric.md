@@ -284,7 +284,7 @@ El patrón más habitual en proyectos grandes: Lakehouse para las capas bronze (
 4. Cambiar al **SQL Endpoint** y `SELECT TOP 10 * FROM clientes_raw;`.
 5. Crear `wh_aurora` y ejecutar:
    ```sql
-   CREATE TABLE dim_cliente_demo (id INT, nombre NVARCHAR(100));
+   CREATE TABLE dim_cliente_demo (id INT, nombre VARCHAR(100));
    INSERT INTO dim_cliente_demo VALUES (1, 'Demo');
    ```
 6. Comparar con el SQL Endpoint del Lakehouse (que **no** permitiría esto).
