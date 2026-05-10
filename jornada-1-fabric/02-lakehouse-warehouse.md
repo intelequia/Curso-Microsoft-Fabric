@@ -65,7 +65,7 @@
 3. Click derecho en el CSV → **Cargar a tablas** → tabla `clientes_raw`.
 4. Cambiar al **SQL Endpoint** y lanzar `SELECT TOP 10 * FROM clientes_raw;`.
 5. Crear `wh_aurora` desde **+ Nuevo elemento → Warehouse**.
-6. Editor SQL: ejecutar `CREATE TABLE dim_cliente_demo (id INT, nombre NVARCHAR(100));` e `INSERT` un par de filas. Comparar con el SQL Endpoint del Lakehouse (que no permitiría esto).
+6. Editor SQL: ejecutar `CREATE TABLE dim_cliente_demo (id INT, nombre VARCHAR(100));` e `INSERT` un par de filas. Comparar con el SQL Endpoint del Lakehouse (que no permitiría esto).
 
 ## Ejercicio corto en aula (10 min)
 
@@ -75,7 +75,7 @@ Cada alumno, en su workspace personal:
 2. Subir `clientes.csv` al Lakehouse en `Files/landing/`.
 3. Cargar el CSV como tabla `clientes_raw`.
 4. Conectarse al SQL endpoint y devolver el `COUNT(*)`.
-5. En el Warehouse, crear una tabla vacía `dim_cliente` con columnas `id INT`, `nombre NVARCHAR(150)`, `segmento NVARCHAR(20)`.
+5. En el Warehouse, crear una tabla vacía `dim_cliente` con columnas `id INT`, `nombre VARCHAR(150)`, `segmento VARCHAR(20)`.
 
 > **Validación**: que el formador (o el compañero de al lado) pueda ver los dos artefactos en el workspace.
 
