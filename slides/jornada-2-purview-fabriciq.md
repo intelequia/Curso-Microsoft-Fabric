@@ -336,7 +336,7 @@ Pregunta: ¿quién debería ser el Data Owner de un Data Product en vuestra orga
 <span class="module">M3 · 30 min</span>
 
 # Information Protection y DLP
-## Etiquetas que **viajan** con el dato
+## Etiquetas que *viajan* con el dato
 
 <!--
 Transición al bloque de protección de la información. Las etiquetas de sensibilidad son la pieza que viaja con el dato. Si alguien exporta a Excel un dataset con etiqueta Restringido-PII, el Excel hereda la encriptación MIP automáticamente. Eso es lo que diferencia a un sistema de gobierno real de uno puramente cosmético. Duración estimada: 25 minutos incluyendo demo.
