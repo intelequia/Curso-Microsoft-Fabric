@@ -56,16 +56,18 @@ Aurora Energía
 
 Cada dominio tiene **1 owner** (rol negocio) y **1 steward** (rol técnico).
 
-### 5. Estate Insights
+### 5. Health Management (Unified Catalog)
 
-- Dashboard ejecutivo de Purview con: nº de assets gobernados, % con owner, % con etiqueta, evolución DQ, accesos concedidos.
-- Útil para reporting al CDO o CISO.
+- Sección de **Unified Catalog** con reportes listos (*ready-made reports*) sobre el estado del data estate: nº de assets gobernados, % con owner, % con etiqueta, evolución de DQ score.
+- **Health Controls**: miden el grado de cumplimiento con los estándares de gobierno y generan un score.
+- **Health Actions**: lista de acciones concretas para mejorar la puntuación.
+- Útil para reporting ejecutivo al CDO o CISO.
 
 ## Demo en vivo (12 min)
 
 1. OneLake Catalog en Fabric → buscar "ventas" → ver `wh_aurora` con la etiqueta de Jornada anterior.
 2. Filtrar por endorsement Certified → mostrar el Data Product `Ventas Aurora — Gold`.
-3. Volver a Purview → Estate Insights.
+3. Volver a Purview → **Unified Catalog → Health Management** → mostrar reportes de gobierno.
 4. Crear una **Data Access Policy** que conceda lectura del Data Product al usuario "carlos.lopez@aurora-test.com" (cuenta ficticia/de prueba).
 5. Comprobar en Fabric que el usuario aparece con permiso de lectura sobre el Warehouse.
 
@@ -73,4 +75,4 @@ Cada dominio tiene **1 owner** (rol negocio) y **1 steward** (rol técnico).
 
 - "Fabric te da el dato, Purview te da la disciplina."
 - "El gobierno no es la suma de mil tareas: es decidir 5 dominios y 5 etiquetas y aplicarlos en serio."
-- "Estate Insights es el dashboard que enseñas al CISO/CDO el primer mes."
+- "**Health Management** (Unified Catalog) es el dashboard que enseñas al CISO/CDO el primer mes."

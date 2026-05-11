@@ -80,7 +80,7 @@ Transición. Purview es enorme — tiene 40+ módulos. Hoy cubrimos lo que os va
 
 | Área | Capacidades clave | Portal |
 |---|---|---|
-| **Data Governance** | Data Map, Unified Catalog, Data Quality, Lineage, Estate Insights, Data Products, Access Policies | `purview.microsoft.com` |
+| **Data Governance** | Data Map, Unified Catalog, Health Management, Data Quality, Lineage, Data Products, Access Policies | `purview.microsoft.com` |
 | **Information Protection** | Sensitivity labels, Auto-labeling, Encryption, Rights Management | `purview.microsoft.com/compliance` |
 | **Risk & Compliance** | DLP, Insider Risk, Communication Compliance, eDiscovery, Audit, Records, Compliance Manager | `purview.microsoft.com/compliance` |
 
@@ -489,7 +489,7 @@ Transición al bloque de integración. Purview y Fabric no son dos herramientas 
 | **Purview Data Map** | Inventario crudo + scans | Data stewards / arquitectos |
 
 <!--
-Esta tabla aclara la confusión más frecuente entre Fabric y Purview. Cada persona tiene su vista optimizada: El técnico (ingeniero de datos) vive en el workspace de Fabric — crea, transforma, depura. El analista semi-técnico vive en el OneLake Catalog dentro de Fabric — busca y descubre datos. El analista de negocio y el Data Owner viven en Purview Unified Catalog — ven el contexto de negocio, el lineage, la calidad. El CISO/CDO vive en Estate Insights — visión ejecutiva del estado del gobierno.
+Esta tabla aclara la confusión más frecuente entre Fabric y Purview. Cada persona tiene su vista optimizada: El técnico (ingeniero de datos) vive en el workspace de Fabric — crea, transforma, depura. El analista semi-técnico vive en el OneLake Catalog dentro de Fabric — busca y descubre datos. El analista de negocio y el Data Owner viven en Purview Unified Catalog — ven el contexto de negocio, el lineage, la calidad. El CISO/CDO vive en Unified Catalog → Health Management — visión ejecutiva del estado del gobierno.
 -->
 
 ---
@@ -553,19 +553,19 @@ Este diagrama es el target architecture de gobierno para Aurora. Cuatro dominios
 
 ---
 
-## Estate Insights
+## Unified Catalog · Health Management
 
-Dashboard ejecutivo de Purview con:
+Reportes ejecutivos de gobierno integrados en Unified Catalog:
 
 - Nº de assets gobernados.
 - % con owner · % con etiqueta.
-- Evolución de **Data Quality**.
+- Evolución de **Data Quality** (Health Controls).
 - Accesos concedidos.
 
 > Es el **dashboard que enseñas al CISO o al CDO el primer mes**.
 
 <!--
-Estate Insights es el cuadro de mando que enseñáis al CISO o al CDO en la reunión del primer mes. Muestra el nivel de madurez de gobierno en números concretos: % de assets con owner asignado, % con sensitivity label, evolución del DQ score, número de incidentes DLP, accesos a datos sensibles. Es la prueba de que el programa de gobierno está funcionando y tiene impacto medible. Preguntar: ¿vuestro CDO o CISO pide este tipo de reporting actualmente? Si no, Estate Insights puede ser el argumento para empezar el proyecto.
+Health Management es la sección de Unified Catalog con reportes listos para medir la madurez de gobierno. Muestra el nivel de madurez en números concretos: % de assets con owner asignado, % con sensitivity label, evolución del DQ score (Health Controls), y Health Actions (acciones concretas para mejorar la puntuación). Es la prueba de que el programa de gobierno está funcionando y tiene impacto medible. Preguntar: ¿vuestro CDO o CISO pide este tipo de reporting actualmente? Si no, Health Management puede ser el argumento para empezar el proyecto. Término anterior 'Estate Insights' no existe en la documentación oficial de Purview — el nombre correcto es Health Management dentro de Unified Catalog.
 -->
 
 ---
@@ -574,12 +574,12 @@ Estate Insights es el cuadro de mando que enseñáis al CISO o al CDO en la reun
 
 1. **OneLake Catalog** en Fabric → buscar "ventas" → ver `wh_aurora` con la etiqueta del bloque anterior.
 2. Filtrar por endorsement *Certified* → mostrar el Data Product `Ventas Aurora — Gold`.
-3. Volver a Purview → **Estate Insights**.
+3. Volver a Purview → **Unified Catalog → Health Management**.
 4. Crear una **Data Access Policy** que conceda lectura del Data Product al usuario `analista@aurora-test.local` (cuenta de prueba).
 5. Comprobar en Fabric que el usuario aparece con permiso de lectura sobre el Warehouse.
 
 <!--
-Demo en vivo. Tiempo estimado: 12 minutos. Secuencia: 1) OneLake Catalog: buscar 'ventas', filtrar por Certified, mostrar shortcuts. 2) Estate Insights: mostrar el dashboard ejecutivo (puede estar vacío en tenant nuevo — usar captura). 3) Data Access Policy: crear una policy que da acceso a 'Analistas Comercial' al Data Product. 4) Verificar en Fabric que el miembro del grupo puede acceder. NOTA: La propagación de Access Policies puede tardar varios minutos. Si no aparece inmediatamente, refrescar el workspace y esperar.
+Demo en vivo. Tiempo estimado: 12 minutos. Secuencia: 1) OneLake Catalog: buscar 'ventas', filtrar por Certified, mostrar shortcuts. 2) Unified Catalog → Health Management: mostrar los reportes de gobierno (puede estar vacío en tenant nuevo — usar captura). 3) Data Access Policy: crear una policy que da acceso a 'Analistas Comercial' al Data Product. 4) Verificar en Fabric que el miembro del grupo puede acceder. NOTA: La propagación de Access Policies puede tardar varios minutos. Si no aparece inmediatamente, refrescar el workspace y esperar.
 -->
 
 ---
@@ -590,10 +590,10 @@ Demo en vivo. Tiempo estimado: 12 minutos. Secuencia: 1) OneLake Catalog: buscar
 
 - *Fabric te da el dato. Purview te da la disciplina.*
 - El gobierno **no es la suma de mil tareas** · son **5 dominios** + **5 etiquetas** aplicadas en serio.
-- **Estate Insights** es el dashboard que enseñas al CISO/CDO el primer mes.
+- **Health Management** (Unified Catalog) es el dashboard que enseñas al CISO/CDO el primer mes.
 
 <!--
-Las tres frases del bloque. Hacerlas leer en voz alta o preguntar si alguien las puede completar: 1) Fabric da el dato, Purview da la... (disciplina). 2) Cinco dominios bien definidos valen más que... (20 mal definidos). 3) Estate Insights es el informe que le enseñas al... (CISO/CDO para demostrar valor). Estos son los argumentos para vender el programa de gobierno internamente.
+Las tres frases del bloque. Hacerlas leer en voz alta o preguntar si alguien las puede completar: 1) Fabric da el dato, Purview da la... (disciplina). 2) Cinco dominios bien definidos valen más que... (20 mal definidos). 3) Health Management es el informe que le enseñas al... (CISO/CDO para demostrar valor). Estos son los argumentos para vender el programa de gobierno internamente.
 -->
 
 ---

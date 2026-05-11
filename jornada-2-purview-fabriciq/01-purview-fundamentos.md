@@ -21,7 +21,7 @@ Microsoft Purview se organiza en torno a tres grandes áreas:
 
 | Área | Capacidades clave | Portal |
 | --- | --- | --- |
-| **Data Governance** | Data Map, Unified Catalog (incl. Data Quality y Lineage como features), Estate Insights, Data Products, Data Access Policies | `purview.microsoft.com` |
+| **Data Governance** | Data Map, Unified Catalog (incl. Data Quality, Lineage y Health Management como features), Data Products, Data Access Policies | `purview.microsoft.com` |
 | **Information Protection** | Sensitivity labels, Auto-labeling, Encryption, Rights Management | `purview.microsoft.com` |
 | **Risk & Compliance** | DLP (Data Loss Prevention), Insider Risk, Communication Compliance, eDiscovery, Audit, Records Management, Compliance Manager | `purview.microsoft.com` |
 
