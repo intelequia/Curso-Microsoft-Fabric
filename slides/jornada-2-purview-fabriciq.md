@@ -116,11 +116,11 @@ El argumento de venta interno para convencer al CIO o al CISO: si construís Fab
 | ¿Qué datos tengo y dónde? | **Data Map + Unified Catalog** |
 | ¿Quién tiene acceso? | **Data Access Policies** + integración Fabric |
 | ¿Cómo encuentro el dato que busco? | **Unified Catalog + Búsqueda** |
-| ¿Cómo sé si un dataset es de calidad? | **Data Quality** |
-| ¿De dónde viene esta tabla? | **Data Lineage** |
-| ¿Qué columnas son PII / financieras? | **Sensitivity labels + Auto-classification** |
+| ¿Cómo sé si un dataset es de calidad? | **Unified Catalog** → Data Quality *(feature integrada)* |
+| ¿De dónde viene esta tabla? | **Data Map + Unified Catalog** → Lineage *(feature integrada)* |
+| ¿Qué columnas son PII / financieras? | **Information Protection** (sensitivity labels + Classifiers) |
 | ¿Cómo evito que peguen un DNI en Teams? | **DLP + Communication Compliance** |
-| ¿Cómo cumplo GDPR / borrado? | **Records Management + DSR + eDiscovery** |
+| ¿Cómo cumplo GDPR / borrado? | **Data Lifecycle Management + Records Management + eDiscovery** |
 | ¿Quién descarga datasets sensibles? | **Insider Risk + Audit + Activity Explorer** |
 | ¿Qué tan maduro estoy? | **Compliance Manager** |
 

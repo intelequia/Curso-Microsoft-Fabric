@@ -13,7 +13,7 @@ math: katex
 
 <span class="tag">Curso · Jornada 1 de 2</span>
 
-# Microsoft **Fabric**
+# Microsoft Fabric
 ## La plataforma analítica unificada de Microsoft
 
 ### 4 horas · master class · caso *Aurora Energía*

@@ -21,9 +21,9 @@ Microsoft Purview se organiza en torno a tres grandes áreas:
 
 | Área | Capacidades clave | Portal |
 | --- | --- | --- |
-| **Data Governance** | Data Map, Unified Catalog, Data Quality, Data Lineage, Estate insights, Data Products, Data Access Policies | `purview.microsoft.com` |
-| **Information Protection** | Sensitivity labels, Auto-labeling, Encryption, Rights Management | `purview.microsoft.com/compliance` |
-| **Risk & Compliance** | DLP (Data Loss Prevention), Insider Risk, Communication Compliance, eDiscovery, Audit, Records Management, Compliance Manager | `purview.microsoft.com/compliance` |
+| **Data Governance** | Data Map, Unified Catalog (incl. Data Quality y Lineage como features), Estate Insights, Data Products, Data Access Policies | `purview.microsoft.com` |
+| **Information Protection** | Sensitivity labels, Auto-labeling, Encryption, Rights Management | `purview.microsoft.com` |
+| **Risk & Compliance** | DLP (Data Loss Prevention), Insider Risk, Communication Compliance, eDiscovery, Audit, Records Management, Compliance Manager | `purview.microsoft.com` |
 
 > **Cambio de marca clave**: lo que antes se llamaba "Microsoft 365 Compliance Center" hoy es **Microsoft Purview Compliance Portal**. Lo que antes era "Azure Purview" hoy es **Microsoft Purview Data Governance**. Es el mismo portal, dos áreas.
 
@@ -41,11 +41,11 @@ Microsoft Purview se organiza en torno a tres grandes áreas:
 | ¿Qué datos tengo y dónde? | Data Map + Unified Catalog |
 | ¿Quién tiene acceso? | Data Access Policies + integración Fabric |
 | ¿Cómo encuentro el dato que busco? | Unified Catalog + Búsqueda |
-| ¿Cómo sé si un dataset es de calidad? | Data Quality |
-| ¿De dónde viene esta tabla? | Data Lineage |
-| ¿Qué columnas son PII / financieras? | Sensitivity labels + Auto-classification |
+| ¿Cómo sé si un dataset es de calidad? | **Unified Catalog** → Data Quality *(feature integrada)* |
+| ¿De dónde viene esta tabla? | **Data Map + Unified Catalog** → Lineage *(feature integrada)* |
+| ¿Qué columnas son PII / financieras? | **Information Protection** (sensitivity labels + Classifiers) |
 | ¿Cómo evito que alguien pegue un DNI en Teams? | DLP + Communication Compliance |
-| ¿Cómo cumplo GDPR / borrado? | Records Management + DSR + eDiscovery |
+| ¿Cómo cumplo GDPR / borrado? | **Data Lifecycle Management + Records Management + eDiscovery** |
 | ¿Quién está descargando datasets sensibles? | Insider Risk + Audit + Activity Explorer |
 | ¿Qué tan maduro estoy en compliance? | Compliance Manager |
 
