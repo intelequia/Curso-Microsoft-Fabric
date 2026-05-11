@@ -49,21 +49,64 @@ Microsoft Purview se organiza en torno a tres grandes áreas:
 | ¿Quién está descargando datasets sensibles? | Insider Risk + Audit + Activity Explorer |
 | ¿Qué tan maduro estoy en compliance? | Compliance Manager |
 
-### 4. La novedad: gobierno **federado** sobre Fabric
+### 4. Gobierno federado sobre Fabric · dos capas
 
-Desde 2024, todo lo que ocurre dentro de Fabric (workspaces, Lakehouses, Warehouses, semantic models, reports) **se ve y se gobierna desde Purview** sin necesidad de scan tradicional. Esto se llama **Microsoft Purview hub for Fabric** y se accede desde:
+Existen dos formas complementarias de gobernar Fabric desde Purview, con requisitos distintos:
 
-- El propio portal de Fabric (icono Purview hub).
-- El portal de Purview Data Governance (Fabric aparece como source nativa).
+#### Purview Hub for Fabric (sin scan, integrado en Fabric)
 
-Esta integración permite:
+Accesible desde el workspace **Admin monitoring** de Fabric (solo Fabric Admins). Es un informe de monitoring que proporciona insights sobre:
 
-- Catalogación automática de items de Fabric.
-- Aplicación de **sensitivity labels** a Lakehouse, Warehouse, semantic model y report (heredado de M365).
-- **Data lineage** automático entre items Fabric (Lakehouse → Notebook → Warehouse → Semantic Model → Report).
-- **Endorsements** (Promoted, Certified) y **Data Quality scores**.
+- **Sensitivity labels** aplicadas a items del tenant.
+- **Endorsements** (Promoted, Certified) y dominios.
+- Exposición de datos sensibles y actividad de clasificación.
 
-### 5. Entorno mínimo para Jornada 2
+No requiere configuración de scan en Purview. No realiza catalogación completa en el Data Map.
+
+#### Purview Data Map — scan de Fabric (Purview Enterprise, requiere configuración)
+
+Para que los items de Fabric aparezcan en el **Purview Data Map** con metadatos, esquemas, clasificaciones automáticas y lineage completo, hay que:
+
+1. Registrar el tenant de Fabric como fuente en Purview Data Map.
+2. Configurar autenticación (Managed Identity o Service Principal) y habilitar las Admin APIs de Fabric.
+3. Crear y ejecutar scans (programados o puntuales).
+
+Lo que **sí funciona de forma nativa** sin scan en Purview:
+
+- Aplicación de **sensitivity labels** directamente en Fabric (Lakehouse, Warehouse, modelo semántico, report).
+- **Endorsements** (Promoted, Certified) gestionados desde el portal de Fabric.
+- **Data Quality scores** en el Unified Catalog (requieren definir reglas DQ, no scan de Data Map).
+
+### 5. Microsoft Fabric Capacity Metrics App
+
+Herramienta de monitorización del consumo de capacidad (CU — Capacity Units) para Fabric y Power BI Premium.
+
+**Prerequisitos:**
+- Ser **Capacity admin** de al menos una capacidad Fabric/Power BI Premium.
+- Licencia **Power BI Pro, PPU** o trial individual de Power BI.
+
+**Instalación primera vez:**
+1. Ir a [AppSource → Microsoft Fabric Capacity Metrics](https://go.microsoft.com/fwlink/?linkid=2219875) y seleccionar *Get it now*. Alternativamente: en el servicio Power BI → Apps → Get apps → buscar "Microsoft Fabric" → seleccionar la app.
+2. Completar el registro en AppSource y seleccionar **Install** en la ventana de Fabric.
+3. En Fabric (cambiar a experiencia Power BI) → **Apps** → seleccionar *Microsoft Fabric Capacity Metrics* → **Connect**.
+4. Configurar parámetros:
+   - `UTC_offset`: desplazamiento UTC de la organización (p.ej. `1` para CET, `5.5` para IST).
+   - `Advanced` (opcional): deshabilita la actualización automática a medianoche.
+5. Seleccionar método de autenticación **OAuth2** y nivel de privacidad **Organizational** → *Sign in and continue*.
+6. Seleccionar la capacidad en el desplegable → la primera carga puede tardar unos minutos.
+
+**Actualización:** no hay que borrar la versión anterior; reinstalar desde AppSource actualiza la app en el mismo workspace.
+
+**Entornos Government Cloud:**
+- GCC: <https://aka.ms/FabricUSGovCapacityUsageReport>
+- GCC High: <https://aka.ms/FabricUSGovHighCapacityUsageReport>
+- DoD: <https://aka.ms/FabricUSGovDodCapacityUsageReport>
+
+> ⚠️ Instalar la app en un workspace con licencia **Pro** para evitar que su propio consumo impacte la capacidad que monitoriza.
+
+> Ref: <https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app-install>
+
+### 6. Entorno mínimo para Jornada 2
 
 | Item | ¿Imprescindible? |
 | --- | --- |
@@ -83,5 +126,5 @@ Esta integración permite:
 ## Mensajes clave
 
 - "Purview es un paraguas. No te quedes solo con Data Map."
-- "Para Fabric, no necesitas hacer scan: la integración nativa publica todo automáticamente."
+- "El **Purview Hub for Fabric** da visibilidad de gobierno sin configurar scans; la **catalogación completa en Purview Data Map sí requiere configurar el scan** del tenant de Fabric."
 - "Sin gobierno, Fabric escala como cualquier data lake: hacia el caos."

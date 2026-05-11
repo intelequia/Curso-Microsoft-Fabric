@@ -130,19 +130,38 @@ Esta tabla es la hoja de ruta de adopción de Purview. No intentéis implementar
 
 ---
 
-## La novedad · gobierno **federado** sobre Fabric
+## Gobierno **federado** sobre Fabric · dos capas
 
-Desde 2024, todo lo que ocurre dentro de Fabric (workspaces, Lakehouses, Warehouses, semantic models, reports) se **ve y se gobierna desde Purview** sin scan tradicional. → **Microsoft Purview hub for Fabric**.
+**Purview Hub for Fabric** (sin scan, integrado en Fabric):
+- Dashboard de gobierno en el workspace *Admin monitoring* de Fabric.
+- Muestra insights de **sensitivity labels**, **endorsements** y dominios sobre los items del tenant.
+- Acceso: portal Fabric → hub de Purview (solo Fabric Admins).
 
-Permite:
-
-- **Catalogación automática** de items Fabric.
-- **Sensitivity labels** heredadas de M365 sobre Lakehouse, Warehouse, modelo semántico y reportes.
-- **Lineage automático** Lakehouse → Notebook → Warehouse → Modelo → Report.
-- **Endorsements** (*Promoted*, *Certified*) y **Data Quality scores**.
+**Purview Data Map** (Purview Enterprise, requiere configurar scan):
+- Registrar el tenant de Fabric como fuente → configurar autenticación → ejecutar scans.
+- Obtiene metadatos, esquemas, **lineage** y clasificaciones automáticas en el Data Map.
+- **Sensitivity labels** y **endorsements** funcionan de forma nativa en Fabric sin scan.
 
 <!--
-Esta es la novedad más importante de Purview para equipos Fabric desde 2024: ya no necesitáis configurar un scan de los items Fabric en el Data Map. La integración nativa publica automáticamente Lakehouses, Warehouses, modelos semánticos, pipelines y reportes en el Data Map. El lineage (quién consume qué de quién) se construye solo. Es casi mágico comparado con cómo funcionaba Purview clásico hace 2 años.
+Distinción clave que antes inducía a error: el Purview Hub for Fabric es un informe de monitoring integrado en el workspace 'Admin monitoring' de Fabric — no requiere configuración de scan pero tampoco hace catalogación completa en el Data Map. Para que los items de Fabric aparezcan en el Purview Data Map (Purview Enterprise) con metadatos, esquemas y lineage completo, sí hay que registrar el tenant de Fabric como fuente de datos y configurar scans (Managed Identity o Service Principal). Esto requiere habilitar las Admin APIs de Fabric y crear un security group en Entra ID. Las sensitivity labels y endorsements sí funcionan de forma nativa en Fabric sin necesidad de scan.
+-->
+
+---
+
+## Fabric Capacity Metrics App · monitorización de capacidad
+
+**Prerequisitos:** Capacity admin + licencia Power BI (Pro, PPU o trial)
+
+**Instalación (primera vez):**
+1. [AppSource → Microsoft Fabric Capacity Metrics](https://go.microsoft.com/fwlink/?linkid=2219875) → *Get it now* → **Install**
+2. Fabric (experiencia Power BI) → **Apps** → seleccionar la app → **Connect**
+3. Configurar `UTC_offset` (p.ej. `1` para CET) → autenticación **OAuth2** + privacidad **Organizational**
+4. Seleccionar capacidad en el desplegable → primera carga puede tardar unos minutos
+
+> 💡 Instalar en un workspace con licencia **Pro** para no impactar la capacidad que se monitoriza.
+
+<!--
+La app muestra consumo de CU (Capacity Units) por workload y workspace, throttling, overutilization y tendencias históricas. Es la herramienta principal para detectar cuellos de botella antes de que el tenant se quede sin capacidad. Para actualizar la app (versión anterior instalada) no hace falta borrarla: reinstalar desde AppSource actualiza en el mismo workspace. Parámetros como CapacityID o RegionName solo aplican a versiones antiguas (≤2.0); en versiones modernas la app muestra todas las capacidades disponibles. Entornos Government Cloud: GCC → aka.ms/FabricUSGovCapacityUsageReport, GCC High → aka.ms/FabricUSGovHighCapacityUsageReport, DoD → aka.ms/FabricUSGovDodCapacityUsageReport. Ref: https://learn.microsoft.com/en-us/fabric/enterprise/metrics-app-install
 -->
 
 ---
@@ -171,7 +190,7 @@ Verificar que todos tienen acceso al tenant del curso. Necesitamos al menos una 
 4. Volver a Fabric → mismo Lakehouse → icono **Microsoft Purview** en la barra superior.
 
 <!--
-Demo en vivo. Tiempo estimado: 8 minutos. El primer 'momento wow' del día: abrir purview.microsoft.com → Unified Catalog y mostrar que ya aparecen los items del workspace de la Jornada 1 sin ninguna configuración adicional. Sin scan, sin setup previo. Mostrar el lineage automático de lh_aurora: de dónde vienen los datos, qué consume qué. Si hay delay en la aparición de los items (puede ser hasta 24h en tenants nuevos), usar la captura de pantalla de respaldo.
+Demo en vivo. Tiempo estimado: 8 minutos. IMPORTANTE: para que los items aparezcan en el Unified Catalog de Purview hace falta tener configurado el scan del tenant de Fabric en Purview Enterprise (registro de la fuente + autenticación + ejecución del scan). Si el scan ya está configurado en el tenant del curso, los items de la Jornada 1 aparecerán. Si no, usar la captura de pantalla de respaldo. Lo que SÍ funciona sin scan: el Purview Hub dentro de Fabric (Admin monitoring workspace) y la aplicación de sensitivity labels directamente en Fabric.
 -->
 
 ---
@@ -181,11 +200,11 @@ Demo en vivo. Tiempo estimado: 8 minutos. El primer 'momento wow' del día: abri
 ## Mensajes clave
 
 - **Purview es un paraguas** · no te quedes solo con Data Map.
-- En Fabric **no necesitas hacer scan** · la integración nativa publica todo automáticamente.
+- **Purview Hub** da visibilidad de gobierno **sin configuración**; **Data Map completo sí requiere scan**.
 - *Sin gobierno, Fabric escala hacia el caos.*
 
 <!--
-Pregunta: ¿necesito configurar un scan de Fabric en el Data Map de Purview? Respuesta: no para los items Fabric nativos — la integración es automática. Sí necesitáis configurar conexiones y scans para fuentes externas (Azure SQL, ADLS externo, Oracle, SAP, etc.). Segundo punto clave: sin gobierno desde el día 1, el inventario nunca estará limpio. Es mucho más fácil clasificar 10 tablas que 1.000.
+Pregunta frecuente: ¿necesito configurar un scan de Fabric en Purview? Depende. El Purview Hub for Fabric (dashboard de monitoring dentro de Fabric) no requiere scan — muestra sensitivity labels y endorsements automáticamente. Pero si queréis catalogación completa en el Purview Data Map (metadatos, esquemas, lineage, clasificaciones automáticas), sí hay que registrar el tenant de Fabric como fuente y configurar scans en Purview Enterprise. Y para fuentes externas (Azure SQL, ADLS, Oracle, SAP...) también hay que configurar sus respectivos scans. Segundo punto: sin gobierno desde el día 1, el inventario nunca estará limpio.
 -->
 
 ---
