@@ -1,10 +1,10 @@
-# J2-M6 · Construyendo Data Agents con Fabric IQ
+# J2-M6 · Construyendo un Data agent end-to-end
 
-**Duración:** 50 min · **Formato:** demo guiada paso a paso + ejercicio
+**Duración:** 35 min · **Formato:** demo guiada paso a paso + ejercicio
 
 ## Objetivos
 
-1. Construir un Data Agent end-to-end sobre los datos gobernados de Aurora Energía.
+1. Construir un **Data agent** end-to-end sobre los datos gobernados de Aurora Energía.
 2. Configurar **fuentes, instrucciones, ejemplos few-shot, herramientas y permisos**.
 3. Probar el agente, depurar respuestas erróneas, mejorar el prompt.
 4. **Publicar** el agente como API y embeberlo en Teams y en una web.
@@ -13,7 +13,7 @@
 ## Pre-requisitos
 
 - Workspace `aurora-curso-fabric` con `wh_aurora`, `sm_aurora_ventas` y, opcionalmente, `eh_aurora_telemetria`.
-- Tenant con Fabric IQ habilitado (J2-M5).
+- **Data agents disponibles** en el workspace (capacidad F-SKU compatible). El workload Fabric IQ no es necesario para este lab.
 - Sensitivity label `Aurora — Confidencial` aplicada a `wh_aurora` (J2-M3).
 - RLS configurado para que `comercial@aurora.test` solo vea sus estaciones (J1-M5 ejercicio).
 
@@ -21,7 +21,7 @@
 
 ### 1. Crear el agente
 
-1. Workspace → **+ New** → **Data Agent**.
+1. Workspace → **+ New** → **Data agent**.
 2. Nombre: `agente-ventas-aurora`.
 3. Capacidad: la del workspace (F-SKU).
 
@@ -86,7 +86,7 @@ Para cada respuesta errónea: revisar la pestaña **Activity / Trace**, ajustar 
 ### 8. Evaluación y observabilidad
 
 - Crear un dataset de evaluación (preguntas + respuestas esperadas) en formato JSONL.
-- Lanzar **batch evaluation** desde Fabric IQ → métricas de groundedness, relevancia, precisión.
+- Lanzar **batch evaluation** desde Fabric → métricas de groundedness, relevancia, precisión.
 - Telemetría: panel de uso (preguntas/día, usuarios, top intents, latencia, coste CU).
 - Conectar logs a Application Insights / Log Analytics si se requiere SOC.
 

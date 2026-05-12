@@ -13,6 +13,8 @@ Este documento detalla **todo lo que necesita tener instalado y configurado el a
 | Suscripción de **Azure** (puede ser trial gratuita con 200 USD) | ➕ Opcional | Solo necesaria si quieres practicar capacidades Fabric F-SKU desde Azure. Para el curso no es obligatoria. |
 | Cuenta **Microsoft 365** con licencia E5 / E5 Compliance o trial equivalente | ✅ recomendada para Jornada 2 | Necesaria para ver Purview en su forma completa (Information Protection, DLP). Si no la tienes, el formador hará la demo y aún así podrás seguir los conceptos. |
 
+> **Sobre Data agents y workload Fabric IQ.** El curso construye un **Data agent** real (capacidad disponible). El **workload Fabric IQ** y sus capacidades **Ontology**, **Graph**, **Plan** y **Operations agent** están en **preview** y su disponibilidad depende del tenant y la región. En este curso se tratan como visión y roadmap; los ejercicios no dependen de ellas.
+
 ## 2. Navegador y red
 
 - **Microsoft Edge** o **Google Chrome** en su última versión estable.

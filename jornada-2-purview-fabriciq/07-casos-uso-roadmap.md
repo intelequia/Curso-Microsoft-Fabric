@@ -5,7 +5,7 @@
 ## Objetivos
 
 1. Conectar todo lo aprendido con casos de uso reales aplicables a una organización energética.
-2. Proponer una **hoja de ruta de adopción** Fabric + Purview + Fabric IQ realista.
+2. Proponer una **hoja de ruta de adopción** Fabric + Purview + Data agents realista.
 3. Definir **roles y responsabilidades** mínimos.
 4. Cerrar con **deberes para casa** (ejercicios pendientes) y los **siguientes pasos**.
 
@@ -16,11 +16,11 @@
 | Área | Caso | Componentes |
 | --- | --- | --- |
 | Comercial | Cuadro de mando ventas multicanal (gasolinera, EV, electricidad, gas) | Lakehouse + Warehouse + Semantic Model + Power BI |
-| Comercial | Asistente conversacional para responsables de zona | Fabric IQ Data Agent + Teams |
+| Comercial | Asistente conversacional para responsables de zona | Data agent + Teams |
 | Operaciones | Mantenimiento predictivo de surtidores | Eventstream + Eventhouse + Notebook ML + Activator |
 | Operaciones | Alertas en tiempo real sobre anomalías de caudal | Eventstream + KQL + Activator → Teams/SMS |
 | Finanzas | P&L por estación con drill-down | Warehouse + Direct Lake + Power BI |
-| RR.HH. | Búsqueda interna sobre políticas y convenios | Fabric IQ + OneLake docs + Sensitivity labels |
+| RR.HH. | Búsqueda interna sobre políticas y convenios | Data agent (con OneLake Files) + Sensitivity labels |
 | Compliance | Cumplimiento GDPR sobre datasets de cliente | Purview Catalog + DLP + Insider Risk |
 | Sostenibilidad | Reporting CSRD/ESG | Mirroring ERP + Warehouse + Power BI + Sensitivity labels |
 
@@ -45,7 +45,8 @@
 **Días 60–90 — Escala + IA**
 
 - Replicar el patrón a **2 dominios más**.
-- Construir el **primer Data Agent** (Fabric IQ) sobre el dominio piloto.
+- Construir el **primer Data agent** sobre el dominio piloto (capacidad GA dentro de Fabric).
+- Evaluar el **workload Fabric IQ (preview)** — Ontology, Graph, Plan, Operations agent — cuando esté disponible en el tenant.
 - Habilitar DLP en Fabric/Power BI con 1–2 reglas críticas.
 - KPIs operativos: % datasets con owner, % con label, % con DQ rule, nº usuarios activos del agente.
 - Plan de formación al resto del equipo.
@@ -58,7 +59,7 @@
 | **Data Steward** | Operativiza el gobierno: glossary, calidad, etiquetas | Analista senior / TI |
 | **Fabric Capacity Admin** | Gestiona la capacidad, monitoreo CU, regiones | Plataforma cloud |
 | **Fabric Workspace Admin** | Permisos a nivel workspace y deployment pipelines | Lead de cada equipo |
-| **AI Steward** | Diseña, publica y evalúa agentes Fabric IQ | Data scientist / ingeniero IA |
+| **AI Steward** | Diseña, publica y evalúa los agentes (Data agents y, cuando proceda, otros agentes del workload Fabric IQ) | Data scientist / ingeniero IA |
 | **Compliance Officer** | DLP, Insider Risk, auditorías | Seguridad / Legal |
 
 ### 4. Anti-patrones que evitar
@@ -74,7 +75,7 @@
 Repaso del **dossier de ejercicios fuera de aula** (ver carpeta `ejercicios/`):
 
 - Jornada 1: workspace, ingesta, pipeline, notebook bronze→silver, warehouse SQL, modelo semántico Direct Lake.
-- Jornada 2: clasificar y etiquetar Fabric desde Purview, construir tu propio Data Agent.
+- Jornada 2: clasificar y etiquetar Fabric desde Purview, construir tu propio Data agent.
 
 Plan de soporte:
 
@@ -84,6 +85,6 @@ Plan de soporte:
 
 ## Mensajes clave
 
-- "Fabric + Purview + Fabric IQ es una **plataforma**, no una herramienta. Tratada como plataforma, escala. Tratada como herramienta, fracasa."
+- "Fabric + Purview + Data agents es una **plataforma**, no una herramienta. Tratada como plataforma, escala. Tratada como herramienta, fracasa. Y el workload **Fabric IQ (preview)** es lo siguiente que vendrá sobre esa plataforma."
 - "Empieza pequeño, gobierna desde el día 1, escala con patrones replicables."
 - "El ROI de la IA en datos depende del **gobierno previo**, no del modelo."

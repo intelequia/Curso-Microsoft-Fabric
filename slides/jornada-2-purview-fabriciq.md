@@ -3,8 +3,8 @@ marp: true
 theme: intelequia
 paginate: true
 size: 16:9
-title: "Jornada 2 · Microsoft Purview + Fabric IQ"
-description: "Master class de 4 horas: gobierno del dato con Purview, integración con Fabric y la nueva capa de inteligencia Fabric IQ"
+title: "Jornada 2 · Microsoft Purview, Data agents y Fabric IQ"
+description: "Master class de 4 horas: gobierno del dato con Purview, integración con Fabric, Data agents sobre datos gobernados y panorama del workload Fabric IQ (preview)"
 author: Intelequia
 math: katex
 ---
@@ -13,13 +13,13 @@ math: katex
 
 <span class="tag">Curso · Jornada 2 de 2</span>
 
-# **Purview** + **Fabric IQ**
+# **Purview** + **Data agents**
 ## Gobernar el dato y convertirlo en *conocimiento accionable*
 
 ### 4 horas · master class · caso *Aurora Energía*
 
 <!--
-Bienvenida a la Jornada 2. Preguntar: ¿quién completó los ejercicios de Jornada 1? ¿Alguien se quedó atascado en algún punto? Recordar que hoy el foco es el gobierno del dato (Purview) y la capa de inteligencia (Fabric IQ). Sin lo de hoy, Fabric es potente pero no controlable ni escalable en una organización real. El hilo conductor sigue siendo Aurora Energía — usamos el mismo workspace de ayer.
+Bienvenida a la Jornada 2. Preguntar: ¿quién completó los ejercicios de Jornada 1? ¿Alguien se quedó atascado en algún punto? Recordar que hoy el foco es el gobierno del dato (Purview) y la capa conversacional sobre dato gobernado (Data agents). El workload Fabric IQ se presenta como visión y roadmap (preview). Sin lo de hoy, Fabric es potente pero no controlable ni escalable en una organización real. El hilo conductor sigue siendo Aurora Energía — usamos el mismo workspace de ayer.
 -->
 
 ---
@@ -35,7 +35,7 @@ Bienvenida a la Jornada 2. Preguntar: ¿quién completó los ejercicios de Jorna
   - ¿Quién accede a **qué**?
   - ¿Qué pasa si alguien se descarga un Excel con **DNI** de clientes?
 
-> **Hoy ponemos disciplina** (Purview) **y razonamiento** (Fabric IQ) sobre lo que ya construimos.
+> **Hoy ponemos disciplina** (Purview) **y razonamiento conversacional** (Data agents) sobre lo que ya construimos.
 
 <!--
 Recorrer el flujo rápidamente. Las preguntas incómodas son el hilo conductor de la jornada de hoy: ¿quién sabe exactamente qué hay en OneLake? ¿quién accede a qué datos y con qué permisos? ¿qué pasa si un empleado descarga datos de clientes con DNI? Esas tres preguntas las respondemos con Purview en los bloques M1-M4. Preguntar si alguien tiene ya Purview en su organización o si es la primera vez que lo ven.
@@ -53,12 +53,13 @@ Recorrer el flujo rápidamente. Las preguntas incómodas son el hilo conductor d
 | **M3** | 30 | Information Protection y DLP |
 | ☕ | 15 | **Descanso** |
 | **M4** | 25 | Integración Purview ↔ Fabric |
-| **M5** | 35 | Fabric IQ · qué es y arquitectura |
-| **M6** | 30 | Fabric IQ · Data Agents en acción |
+| **M5** | 30 | Data agents · fundamentos y posicionamiento |
+| **M6** | 35 | Construyendo un Data agent end-to-end |
+| **M6.5** | 5 | Workload Fabric IQ (preview) · visión y roadmap |
 | **M7** | 25 | Casos de uso, hoja de ruta, cierre |
 
 <!--
-Misma estructura que J1: bloques teóricos + demos en vivo + descanso a mitad. M1-M3 es Purview (gobierno, catalogo, protección). M4 es la integración bidireccional Purview↔Fabric. M5-M6 es Fabric IQ y Data Agents — la parte más novedosa. M7 es la hoja de ruta para llevarlo a vuestra organización. Preguntar si el foco de interés está más en governance/compliance o en IA.
+Misma estructura que J1: bloques teóricos + demos en vivo + descanso a mitad. M1-M3 es Purview (gobierno, catalogo, protección). M4 es la integración bidireccional Purview↔Fabric. M5-M6 es la parte conversacional sobre dato gobernado: Data agents — capacidad disponible que construimos paso a paso. M6.5 es un cierre conceptual sobre el workload Fabric IQ (preview) y cómo Data agents se inscribe en él. M7 es la hoja de ruta para llevarlo a vuestra organización. Preguntar si el foco de interés está más en governance/compliance o en IA.
 -->
 
 ---
@@ -458,10 +459,10 @@ Pregunta: ¿qué pasa si alguien descarga un Excel con datos Restringido-PII des
 <!-- _class: lead bare -->
 
 # ☕ Descanso · 15 min
-### Volvemos para *Fabric IQ* y los *Data Agents*
+### Volvemos para los *Data agents* (y echaremos un vistazo al workload *Fabric IQ*)
 
 <!--
-Descanso de 15 minutos. La segunda parte del día es la más novedosa y la que más preguntas va a generar: Fabric IQ y los Data Agents. Aprovechar el descanso para abrir el portal de Fabric IQ en el tenant y verificar que está habilitado. Si hay algún problema de configuración, es el momento de resolverlo antes de la demo.
+Descanso de 15 minutos. La segunda parte del día es la más novedosa y la que más preguntas va a generar: los Data agents. Aprovechar el descanso para abrir el portal de Fabric en el tenant y verificar que el workspace puede crear Data agents (capacidad F-SKU compatible). Si hay algún problema de configuración, es el momento de resolverlo antes de la demo.
 -->
 
 ---
@@ -600,31 +601,52 @@ Las tres frases del bloque. Hacerlas leer en voz alta o preguntar si alguien las
 
 <!-- _class: section -->
 
-<span class="module">M5 · 35 min</span>
+<span class="module">M5 · 30 min</span>
 
-# Fabric IQ
-## La capa de **inteligencia** sobre Fabric
+# Data agents en Fabric
+## Capa *conversacional* sobre dato gobernado
 
 <!--
-Transición a Fabric IQ — la novedad más grande de 2025-2026 en el ecosistema Fabric. Es lo que convierte Fabric de una plataforma de datos en una plataforma de conocimiento accionable. Data Agents son el componente estrella: permiten hacer preguntas en lenguaje natural sobre los datos gobernados y obtener respuestas con trazabilidad. Duración estimada: 30 minutos incluyendo demo.
+Transición a la parte conversacional sobre dato gobernado. Los Data agents son la capacidad madura: permiten hacer preguntas en lenguaje natural sobre los datos gobernados y obtener respuestas con trazabilidad. Aclarar desde el principio: Data agent es la capacidad concreta que construiremos hoy; el workload Fabric IQ es el paraguas (preview) en el que se inscribe y al que se irán sumando otras capacidades como Ontology, Graph, Plan u Operations agent. Duración estimada: 30 minutos incluyendo demo.
 -->
 
 ---
 
-## ¿Qué es Fabric IQ?
+## ¿Qué es un Data agent?
 
-Capa de **inteligencia** que Microsoft introduce en Fabric (Ignite 2025, en evolución durante 2026). Reúne:
+Capacidad **conversacional y razonadora** sobre datos gobernados de Fabric.
 
-- Una **capa semántica enriquecida y unificada** (ontologías) que va más allá del clásico semantic model.
-- **Data Agents** · agentes razonadores sobre Lakehouse / Warehouse / Eventhouse / docs.
-- **Copilot for Fabric** integrado en cada experiencia.
-- **Mejoras del Q&A** en lenguaje natural sobre semantic models.
-- **Observabilidad** del uso de IA y datos.
+- **Multi-fuente** · Warehouse, Lakehouse, Power BI semantic model, Eventhouse, OneLake Files.
+- **Multi-paso** · planifica, llama a herramientas, evalúa y responde.
+- **Gobernado** · hereda RLS/OLS, sensitivity labels y permisos de cada fuente.
+- **Trazable** · cada respuesta cita datasets, queries generadas y filas usadas.
+- **Publicable** · endpoint REST, app de Teams, embed web con Entra ID.
 
-> *Convierte el dato gobernado en* **conocimiento accionable por IA**, *con trazabilidad y control.*
+> Un Data agent **no es un chatbot** · es una capa de razonamiento sobre dato gobernado, con auditoría.
 
 <!--
-Fabric IQ no es un chatbot sobre vuestros datos — eso es lo que ya existe con Power BI Q&A. Fabric IQ es una capa de razonamiento que: 1) Entiende el significado de los datos gracias al modelo semántico y al glossary de Purview. 2) Respeta automáticamente los permisos RLS y las sensitivity labels. 3) Puede ejecutar múltiples herramientas (SQL sobre Warehouse, KQL sobre Eventhouse, búsqueda en documentos de OneLake) para responder preguntas complejas. 4) Incluye trazabilidad completa: qué datasets consultó, qué SQL/DAX ejecutó, qué filas usó. Preguntar: ¿alguien ha probado ya Q&A en Power BI? ¿qué limitaciones habéis encontrado?
+Dejar claro: Data agent es la pieza práctica del bloque — lo que construiremos en M6 y lo que el alumno se llevará al lab. Multi-fuente significa que la misma conversación puede saltar entre Warehouse, Eventhouse y un PDF en OneLake. Multi-paso es la diferencia con Power BI Q&A: el agente puede planificar varias consultas, evaluarlas y combinar resultados. Gobernado: hereda RLS/OLS, labels y permisos de cada fuente — si el usuario no puede ver una fila, el agente tampoco. Trazable: cada respuesta cita el SQL/DAX/KQL generado y los datasets usados. Publicable: endpoint REST + app de Teams + iframe.
+-->
+
+---
+
+## El workload Fabric IQ (preview)
+
+Paraguas que Microsoft está construyendo dentro de Fabric. Reúne, según la documentación pública actual:
+
+| Capacidad | Para qué sirve | Estado |
+|---|---|---|
+| **Ontology** | Vocabulario y semántica de negocio sobre el dato físico | Preview |
+| **Graph** | Materializa las relaciones de la ontology como grafo | Preview |
+| **Plan** | Define planes que combinan datos y acciones | Preview |
+| **Data agent** | Asistente conversacional sobre datos | **Disponible** |
+| **Operations agent** | Agente para tareas operativas sobre la plataforma | Preview |
+| **Power BI semantic model** | Capa semántica tabular tradicional, integrable como fuente | GA |
+
+> En este curso construimos un **Data agent**. El resto del workload · **visión y roadmap**.
+
+<!--
+Esta es la slide que aclara la confusión más frecuente del mercado: 'Fabric IQ' no es sinónimo de 'Data agent'. Fabric IQ es un *workload paraguas* en preview que agrupa varias capacidades: Ontology, Graph, Plan, Data agent y Operations agent, más la integración con Power BI semantic models. La única capacidad disponible y demostrable hoy en clase es el Data agent. Las demás las tratamos como visión y roadmap. Disclaimer: Ontology, Graph, Plan y Operations agent están en preview y su disponibilidad depende de tenant y región — verificar antes de comprometer en proyecto.
 -->
 
 ---
@@ -638,41 +660,41 @@ Fabric IQ no es un chatbot sobre vuestros datos — eso es lo que ya existe con 
 │     Aplicaciones / Usuarios        │
 │ Teams · Copilot M365 · Web · API   │
 └────────────────────────────────────┘
-                  ▲
+              ▲
 ┌────────────────────────────────────┐
-│   Data Agents (Fabric IQ)          │
-│  Razonamiento + tools + contexto   │
+│        Data agent (Fabric)         │
+│ Razonamiento + tools + citas + mem.│
 └────────────────────────────────────┘
-                  ▲
-┌────────────────────────────────────┐
-│ Capa semántica unificada (IQ Layer)│
-│  Ontologías · Metrics · Glossary   │
-└────────────────────────────────────┘
-                  ▲
-┌────────────────────────────────────┐
-│   OneLake (Delta) + Warehouse      │
-│   Eventhouse + Mirrored DB         │
-└────────────────────────────────────┘
-                  ▲
-┌────────────────────────────────────┐
-│    Microsoft Purview (gobierno)    │
-└────────────────────────────────────┘
+              ▲  fuentes que puede usar
+   ┌────────┴────────┐
+┌─────────────┐    ┌─────────────────────┐
+│ Power BI    │    │ Ontology / Graph    │
+│ semantic    │    │ (preview) workload  │
+│ model (GA)  │    │ Fabric IQ           │
+└─────────────┘    └─────────────────────┘
+      ▲                       ▲
+      └──── OneLake · Lakehouse / Warehouse / Eventhouse / Files
+              ▲
+┌──────────────────────────────────┐
+│ Microsoft Purview · gobierno      │
+│ transversal: labels, lineage, DLP │
+└──────────────────────────────────┘
 ```
 
 <!--
-Leer el diagrama de abajo a arriba — eso es el flujo de trabajo del agente: La base es OneLake (los datos físicos). Encima, la capa semántica (modelos DAX, glossary Purview, metadatos). Encima, los Data Agents que razonan usando las herramientas disponibles. Encima, las aplicaciones de consumo (Teams, web, API REST). Purview atraviesa toda la arquitectura de forma transversal — el gobierno no es una capa opcional, es la base que hace el sistema confiable.
+El diagrama distingue de forma explícita lo que hasta ahora estaba mezclado: 1) la capa de aplicaciones (Teams, Copilot, web, API). 2) el Data agent como pieza razonadora. 3) Las fuentes que puede usar, que NO son una sola caja: por un lado el Power BI semantic model (GA, capa semántica madura de hoy) y por otro Ontology/Graph del workload Fabric IQ (preview, capa semántica enriquecida del futuro). 4) Por debajo, OneLake con Lakehouse, Warehouse, Eventhouse y Files. 5) Atravesando todo, Purview como gobierno transversal. Insistir: hoy demostramos un Data agent que usa semantic model y Warehouse; cuando Ontology esté disponible en vuestro tenant, simplemente se añade como una fuente más.
 -->
 
 ---
 
 ## Tres ideas a recordar
 
-1. **Capa semántica** · el modelo único que entiende qué es *venta*, *estación*, *cliente activo*, por encima del esquema físico.
-2. **Data Agents** · agentes con tools (SQL, KQL, búsqueda en docs), memoria, expuestos como API o chat.
-3. **Gobierno integrado** · respeta permisos, etiquetas y políticas de Purview / RLS / OLS.
+1. **Capa semántica · hoy** = el **Power BI semantic model** (GA). **Mañana** se complementará con **Ontology (preview)** del workload Fabric IQ.
+2. **Data agent** · capacidad razonadora con tools (SQL, DAX, KQL, búsqueda), memoria y citas, expuesta como API o chat.
+3. **Gobierno integrado** · hereda permisos, etiquetas y políticas de Purview / RLS / OLS de cada fuente.
 
 <!--
-Estas tres ideas son el resumen ejecutivo de Fabric IQ para una audiencia de negocio. Si tuvierais que vender Fabric IQ a un director de área en 30 segundos, usad estas tres. La capa semántica es el por qué: sin ella, el agente no entiende qué significa 'importe neto'. Los Data Agents son el qué: entidades que razonan y ejecutan. El gobierno integrado es el cómo: Purview hace que el agente sea seguro y auditable.
+La idea 1 es la más importante para evitar confusiones: hoy 'capa semántica' = Power BI semantic model (GA). Ontology es el futuro (preview) y NO sustituye al semantic model: lo complementa. La idea 2 resume qué es un Data agent: razonamiento + tools + memoria + citas. La idea 3 es la conexión con todo el bloque anterior de Purview: el gobierno no es opcional, es lo que hace que el agente sea seguro.
 -->
 
 ---
@@ -683,18 +705,19 @@ Estas tres ideas son el resumen ejecutivo de Fabric IQ para una audiencia de neg
 
 | Producto | Qué hace | Diferencia |
 |---|---|---|
-| **Power BI Q&A** | NL → DAX sobre **un** semantic model | 1 modelo, 1 conversación, **sin razonamiento** |
+| **Power BI Q&A** | NL → DAX sobre **un** semantic model | 1 modelo, **sin razonamiento** multi-paso |
 | **Copilot in Fabric** | Asiste al desarrollador (genera SQL, KQL, Spark, DAX) | Foco en **productividad del IT** |
 | **Azure AI Foundry Agents** | Agentes generales sobre Azure | Más amplio · requiere **integrar manualmente** tu data estate |
-| **Fabric IQ Data Agents** | Agentes razonadores **específicos de tu data estate gobernada** | **Cero plumbing** · gobierno automático · multi-modelo |
+| **Fabric · Data agent** | Agente razonador sobre datos gobernados de Fabric | **Cero plumbing** · gobierno heredado · multi-fuente |
+| **Fabric IQ workload (preview)** | *Paraguas* con Ontology, Graph, Plan, Operations agent + Data agent | Visión de capa semántica empresarial · capacidades en **preview** |
 
 <!--
-La pregunta más frecuente: '¿esto es Power BI Q&A pero más potente?' No exactamente. Q&A es para un solo semantic model, sin razonamiento multi-paso. Fabric IQ Data Agent es multi-fuente (Warehouse + Eventhouse + docs), razona en múltiples pasos y tiene gobierno automático de Purview. Respecto a Azure AI Foundry Agents: son más potentes y configurables, pero requieren integrar manualmente tu data estate. Fabric IQ tiene cero plumbing — los datos ya están conectados.
+La pregunta más frecuente: '¿esto es Power BI Q&A pero más potente?' Respuesta: el Data agent es multi-fuente y multi-paso, mientras que Q&A se limita a un solo semantic model. Respecto a Azure AI Foundry Agents: son más potentes y configurables, pero requieren integrar manualmente vuestro data estate; el Data agent tiene cero plumbing porque vive dentro de Fabric. La última fila aclara la confusión: Fabric IQ es el workload paraguas (preview), no es sinónimo del Data agent. Cuando vuestro tenant tenga Fabric IQ habilitado, el Data agent podrá consumir también las ontologías y el grafo del workload, pero hoy no es requisito.
 -->
 
 ---
 
-## Capacidad de razonamiento
+## Capacidad de razonamiento del Data agent
 
 - **Function calling / tools** · `execute SQL on Warehouse`, `run KQL on Eventhouse`, `search OneLake docs`.
 - **Reasoning loops** · planifica varios pasos antes de responder.
@@ -709,49 +732,58 @@ El reasoning loop es lo que diferencia al agente de una búsqueda simple. El age
 
 ## Requisitos
 
-- Capacidad Fabric F-SKU · **F4 mínimo** para experimentación, **F64+** para producción.
-- Tenant con **Fabric IQ habilitado** desde el admin portal.
-- Modelos LLM aprovisionados por Microsoft en la región de la capacidad (sin coste extra dentro de la capacidad, **hasta cuota CU**).
-- Items origen ya con **etiquetas Purview y permisos** definidos.
+**Para construir un Data agent (lo que haremos hoy)**
+
+- Capacidad Fabric F-SKU compatible · **F4+** para experimentación, **F64+** para producción.
+- Workspace con los items origen ya gobernados (labels, RLS/OLS, permisos).
+- Modelos LLM aprovisionados por Microsoft en la región de la capacidad (consumo dentro de la cuota CU).
+
+**Para explorar el workload Fabric IQ (preview, opcional)**
+
+- Tenant con el workload Fabric IQ habilitado por el admin.
+- Disponibilidad de Ontology / Graph / Plan / Operations agent · sujeta a preview y región.
+
+> *En este curso usaremos solo el primer bloque. El segundo es informativo.*
 
 <!--
-F4 para experimentar, F64 para producción — esto es orientativo, puede variar. El LLM lo provee Microsoft en la región de la capacidad de Fabric: no necesitáis configurar una clave de Azure OpenAI ni pagar por separado el modelo. Eso simplifica enormemente el compliance, porque los datos no salen de vuestra región de capacidad. Importante: los items origen deben tener etiquetas Purview y permisos configurados ANTES de conectarlos al agente — el agente hereda el gobierno, no lo crea.
+Separar los dos bloques de requisitos evita que el alumno piense que necesita Fabric IQ habilitado para hacer el lab. Lo único necesario para el lab es: capacidad F-SKU compatible + items con gobierno + cuota CU para los LLM (que provee Microsoft, no hace falta Azure OpenAI por separado). El segundo bloque es por si el alumno quiere experimentar con Ontology o Graph en su tenant: requiere que el admin habilite el workload Fabric IQ (preview).
 -->
 
 ---
 
 <!-- _class: tight -->
 
-## Tipos de Data Agent
+## Patrones de uso de un Data agent
 
-| Tipo | Para quién | Ejemplo Aurora |
+| Patrón | Para quién | Ejemplo Aurora |
 |---|---|---|
-| **Analytical** | Negocio que pregunta KPI | "¿Cómo van las ventas de gasoil este trimestre vs el anterior?" |
-| **Operational** | Operaciones | "¿Qué surtidores tienen alarmas activas y desde cuándo?" |
-| **Search / Knowledge** | RR.HH., legal | "Búscame las cláusulas de SLA de los contratos firmados con el proveedor X" |
-| **Workflow** | Procesos automatizados | "Consolida el informe diario de cierre y envíalo al canal Finanzas" |
+| **Analítico** | Negocio que pregunta KPI | "¿Cómo van las ventas de gasoil este trimestre vs el anterior?" |
+| **Operativo / tiempo real** | Operaciones (apoyado en Eventhouse) | "¿Qué surtidores tienen alarmas activas y desde cuándo?" |
+| **Conocimiento documental** | RR.HH., legal (apoyado en OneLake Files) | "Búscame las cláusulas de SLA de los contratos firmados con el proveedor X" |
+| **Asistencia a procesos** | Procesos de negocio | "Resumen del cierre diario en el canal Finanzas" |
+
+> *Patrones de uso, no tipos de producto* · todos se construyen con la misma capacidad **Data agent**.
 
 <!--
-Los cuatro tipos cubren los cuatro casos de uso más comunes. En Aurora empezamos con el Analytical (ventas y KPIs comerciales) porque es el más claro y el que más impacto inmediato tiene para la audiencia de negocio. El Operational (alertas de surtidores) es el siguiente paso natural — conecta con el Eventhouse que montamos en la Jornada 1. Search/Knowledge (políticas RR.HH.) y Workflow (consolidación de informes) son más complejos y se dejan para proyectos avanzados. Preguntar: ¿cuál de estos tipos sería más útil en vuestro contexto actual?
+IMPORTANTE: estos son patrones de uso, NO tipos de producto distintos. En la UI de Fabric no encontraréis 'Crear Analytical Data Agent' o 'Crear Operational Data Agent' — hay un único tipo de item llamado 'Data agent', y los cuatro patrones se logran configurando fuentes, instrucciones y tools distintas. En Aurora empezamos con el patrón analítico (ventas y KPIs comerciales) porque es el más claro y el de más impacto inmediato. El operativo (alertas de surtidores) es el siguiente paso natural — conecta con el Eventhouse que montamos en J1. El de conocimiento documental (políticas RR.HH.) y el de asistencia a procesos (consolidación de informes) son más complejos y se dejan para proyectos avanzados.
 -->
 
 ---
 
 ## Demo en vivo · 12 min
 
-1. Mostrar el área **Fabric IQ** en el portal (workspace o tenant admin).
-2. Crear un **Data Agent** vacío: `agente-ventas-aurora`.
-3. Asociar como fuentes `wh_aurora` y `sm_aurora_ventas`.
-4. Definir 2–3 instrucciones de sistema (rol, dominio, tono, qué **no** hacer).
-5. Probar:
+1. Crear un **Data agent** en el workspace `aurora-curso-fabric`: `agente-ventas-aurora`.
+2. Asociar como fuentes `wh_aurora` y `sm_aurora_ventas`.
+3. Definir 2–3 instrucciones de sistema (rol, dominio, tono, qué **no** hacer).
+4. Probar:
    - "¿Cuántas estaciones tenemos por provincia?"
    - "Top 5 productos en marzo."
    - "Compara electricidad vs combustible en el último año."
-6. Mostrar la pestaña **Trace** · SQL/DAX generado, citas, datasets accedidos.
-7. Mostrar publicación como **endpoint** y embed en Teams.
+5. Mostrar la pestaña **Trace** · SQL/DAX generado, citas, datasets accedidos.
+6. Mostrar publicación como **endpoint** y embed en Teams.
 
 <!--
-Demo en vivo. Tiempo estimado: 12 minutos. Secuencia: 1) Abrir el área Fabric IQ en el workspace (debe estar habilitado por el admin). 2) Crear el Data Agent 'agente-ventas-aurora'. 3) Asociar wh_aurora y sm_aurora_ventas como fuentes. 4) Añadir 2-3 instrucciones básicas de sistema. 5) Probar las 3 preguntas de la slide — mostrar la respuesta y la pestaña Trace. 6) Mostrar la publicación como endpoint. Si hay problemas con el tenant, usar el agente pre-configurado de respaldo. La pestaña Trace es la más importante: demuestra que el agente no 'inventa' — muestra el SQL exacto que ejecutó para llegar a la respuesta.
+Demo en vivo. Tiempo estimado: 12 minutos. Secuencia: 1) Crear el Data agent en el workspace (no buscar 'Fabric IQ' en la barra lateral — es un item del workspace). 2) Asociar wh_aurora y sm_aurora_ventas como fuentes. 3) Añadir 2-3 instrucciones básicas de sistema. 4) Probar las 3 preguntas de la slide — mostrar la respuesta y la pestaña Trace. 5) Mostrar la publicación como endpoint. Plan B: si el Data agent no estuviera disponible en el tenant del aula, usar el agente pre-provisionado del tenant del formador y pasar la demo a 'guided walkthrough' con capturas. La pestaña Trace es la más importante: demuestra que el agente no 'inventa' — muestra el SQL exacto que ejecutó para llegar a la respuesta.
 -->
 
 ---
@@ -760,12 +792,12 @@ Demo en vivo. Tiempo estimado: 12 minutos. Secuencia: 1) Abrir el área Fabric I
 
 ## Mensajes clave
 
-- Fabric IQ **no es un chatbot** · es una capa de **razonamiento gobernada**.
+- Un **Data agent no es un chatbot** · es una capa de **razonamiento gobernada**.
 - Sin gobierno (Purview + labels + RLS), el agente **expone lo que no debe**.
-- El secreto está en la **capa semántica**: si el modelo es bueno, el agente brilla.
+- Capa semántica · **hoy** = Power BI semantic model (GA); **mañana** también Ontology (preview) del workload Fabric IQ.
 
 <!--
-El punto más crítico del bloque: sin gobierno previo, el agente expone lo que no debe. Esto no es una exageración teórica: si no hay RLS sobre dim_cliente, el agente podría responder preguntas con DNI y datos personales de clientes. El gobierno (Purview + labels + RLS) es la condición necesaria y previa para publicar un agente de IA sobre datos reales en una organización. Hacer esta conexión explícita: todo lo que hemos hecho en M1-M4 hoy es exactamente lo que hace que M5-M6 sea seguro.
+El punto más crítico del bloque: sin gobierno previo, el agente expone lo que no debe. Esto no es una exageración teórica: si no hay RLS sobre dim_cliente, el agente podría responder preguntas con DNI y datos personales de clientes. El gobierno (Purview + labels + RLS) es la condición necesaria y previa para publicar un agente de IA sobre datos reales en una organización. Hacer la conexión explícita: todo lo que hemos hecho en M1-M4 hoy es exactamente lo que hace que M5-M6 sea seguro. Tercer mensaje: dejar bien claro que la capa semántica de hoy sigue siendo el Power BI semantic model (GA); Ontology está en preview y se sumará cuando esté disponible — no la sustituye.
 -->
 
 ---
@@ -786,12 +818,12 @@ Transición al bloque más hands-on de la jornada. En M5 creamos el agente rápi
 ## Pre-requisitos
 
 - Workspace `aurora-curso-fabric` con `wh_aurora`, `sm_aurora_ventas` y, opcionalmente, `eh_aurora_telemetria`.
-- Tenant con **Fabric IQ habilitado**.
+- **Data agents disponibles** en el workspace (capacidad F-SKU compatible).
 - Sensitivity label `Aurora — Confidencial` aplicada a `wh_aurora`.
 - **RLS** configurado para que el rol `Comercial` solo vea sus estaciones.
 
 <!--
-Verificar que el workspace tiene todos los items necesarios de la Jornada 1. Si alguien no completó los ejercicios de J1, puede usar el workspace de demo compartido. El Fabric IQ debe estar habilitado por el admin del tenant — esto se hace en el Admin Portal. La sensitivity label ya está aplicada a wh_aurora si completamos la demo de M3. El RLS de Comercial debe estar configurado en el modelo semántico sm_aurora_ventas.
+Verificar que el workspace tiene todos los items necesarios de la Jornada 1. Si alguien no completó los ejercicios de J1, puede usar el workspace de demo compartido. Para construir Data agents basta con la capacidad F-SKU compatible y los items con gobierno aplicado — no hace falta tener el workload Fabric IQ habilitado en el tenant. La sensitivity label ya está aplicada a wh_aurora si completamos la demo de M3. El RLS de Comercial debe estar configurado en el modelo semántico sm_aurora_ventas.
 -->
 
 ---
@@ -894,7 +926,7 @@ El endpoint REST es la forma más flexible de integrar el agente con cualquier a
 ## 7 · Evaluación y observabilidad
 
 - **Dataset de evaluación** (preguntas + respuestas esperadas) en JSONL.
-- **Batch evaluation** desde Fabric IQ · métricas de *groundedness*, relevancia, precisión.
+- **Batch evaluation** desde el Data agent · métricas de *groundedness*, relevancia, precisión.
 - **Telemetría** · panel de uso (preguntas/día, usuarios, top intents, latencia, **coste CU**).
 - Conectar logs a **Application Insights / Log Analytics** si lo requiere SOC.
 
@@ -948,11 +980,11 @@ El último bloque es la visión estratégica: cómo escalarlo en vuestra organiz
 | Área | Caso | Componentes |
 |---|---|---|
 | Comercial | Cuadro de mando ventas multicanal | Lakehouse + Warehouse + Semantic + Power BI |
-| Comercial | Asistente conversacional para responsables de zona | **Fabric IQ Data Agent + Teams** |
+| Comercial | Asistente conversacional para responsables de zona | **Data agent + Teams** |
 | Operaciones | Mantenimiento predictivo de surtidores | Eventstream + Eventhouse + Notebook ML + Activator |
 | Operaciones | Alertas en tiempo real sobre anomalías | Eventstream + KQL + Activator |
 | Finanzas | P&L por estación con drill-down | Warehouse + Direct Lake + Power BI |
-| RR.HH. | Búsqueda interna sobre políticas | Fabric IQ + OneLake docs + Sensitivity labels |
+| RR.HH. | Búsqueda interna sobre políticas | Data agent (con OneLake Files) + Sensitivity labels |
 | Compliance | Cumplimiento GDPR sobre datasets de cliente | Purview Catalog + DLP + Insider Risk |
 | Sostenibilidad | Reporting CSRD / ESG | Mirroring ERP + Warehouse + Power BI + Labels |
 
@@ -977,7 +1009,8 @@ Leer los casos por área de negocio. Preguntar: ¿en vuestra organización, cuá
 
 **Días 60–90 · Escalar + IA**
 - Replicar el patrón a 2 dominios más.
-- Construir el primer **Data Agent**.
+- Construir el primer **Data agent** (capacidad disponible).
+- Explorar el workload **Fabric IQ (preview)** si el tenant lo habilita.
 - Activar **DLP** con 1–2 reglas críticas.
 - KPIs: % datasets con owner, con label, con DQ rule, usuarios activos del agente.
 
@@ -997,7 +1030,7 @@ Este plan de 90 días es el entregable más práctico del curso. Días 0-30: gob
 | **Data Steward** | Operativiza · glossary, calidad, etiquetas | Analista senior / TI |
 | **Fabric Capacity Admin** | Gestiona la capacidad, monitoreo CU, regiones | Plataforma cloud |
 | **Fabric Workspace Admin** | Permisos por workspace · deployment pipelines | Lead de cada equipo |
-| **AI Steward** | Diseña, publica y evalúa agentes Fabric IQ | Data scientist / ingeniero IA |
+| **AI Steward** | Diseña, publica y evalúa los agentes (Data agents y, cuando proceda, otros agentes del workload Fabric IQ) | Data scientist / ingeniero IA |
 | **Compliance Officer** | DLP, Insider Risk, auditorías | Seguridad / Legal |
 
 <!--

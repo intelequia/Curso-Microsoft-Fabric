@@ -1,20 +1,20 @@
-# Ejercicio 3 (Jornada 2) · Construir tu propio Data Agent con Fabric IQ
+# Ejercicio 3 (Jornada 2) · Construir tu propio Data agent en Fabric
 
 **Tiempo estimado:** 90 min · **Modalidad:** fuera de aula
 
 ## Objetivo
 
-Crear, probar, depurar y publicar un Data Agent funcional sobre los datos de Aurora Energía.
+Crear, probar, depurar y publicar un Data agent funcional sobre los datos de Aurora Energía.
 
 ## Pre-requisitos
 
 - Tener completados los ejercicios 1 a 6 de Jornada 1 y los ejercicios 1 y 2 de Jornada 2.
-- Fabric IQ habilitado en el tenant.
+- **Data agents disponibles** en el workspace (capacidad F-SKU compatible). El workload Fabric IQ no es necesario para este ejercicio.
 - Etiqueta `Aurora — Confidencial` aplicada a `wh_aurora` y `sm_aurora_ventas`.
 
 ## Pasos
 
-1. Workspace → **+ New → Data Agent** → `agente-aurora-<iniciales>`.
+1. Workspace → **+ New → Data agent** → `agente-aurora-<iniciales>`.
 2. Configura las **instrucciones del sistema**:
 
    ```text

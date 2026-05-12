@@ -34,12 +34,12 @@
 - Data Quality: <https://learn.microsoft.com/purview/data-quality-overview>
 - Data Access Policies: <https://learn.microsoft.com/purview/concept-policies-data-owner>
 
-## Fabric IQ y Copilot
+## Data agents, Copilot y workload Fabric IQ
 
-- Copilot in Fabric: <https://learn.microsoft.com/fabric/get-started/copilot-fabric-overview>
-- Data Agents: <https://learn.microsoft.com/fabric/data-science/concept-data-agent>
-- Skills y semantic layer: <https://learn.microsoft.com/fabric/data-science/concept-ai-skills>
+- Data agent en Fabric: <https://learn.microsoft.com/fabric/data-science/concept-data-agent>
+- Copilot in Fabric (visión general): <https://learn.microsoft.com/fabric/get-started/copilot-fabric-overview>
 - Responsible AI en Fabric: <https://learn.microsoft.com/fabric/get-started/copilot-privacy-security>
+- Workload **Fabric IQ (preview)** · Ontology, Graph, Plan, Operations agent · consultar el portal de documentación de Fabric en <https://learn.microsoft.com/fabric/> y el blog oficial. Disponibilidad sujeta a tenant y región.
 
 ## Identidad, seguridad y red
 
