@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formación Microsoft Fabric + Purview + Fabric IQ para equipos de Data | Intelequia</title>
+<meta name="description" content="Curso práctico de Microsoft Fabric, Purview y Fabric IQ para equipos de datos. Master class de 8 a 12 horas con demostraciones en vivo, ejercicios guiados y caso de negocio end-to-end. Bonificable FUNDAE.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --c-bg:        #FAFAFB;
+    --c-surface:   #FFFFFF;
+    --c-ink:       #0F172A;
+    --c-ink-soft:  #334155;
+    --c-mute:      #64748B;
+    --c-line:      #E2E8F0;
+    --c-accent:    #6366F1;
+    --c-accent-2:  #06B6D4;
+    --c-warn:      #F59E0B;
+    --c-good:      #10B981;
+    --grad-brand:  linear-gradient(135deg, #6366F1 0%, #8B5CF6 45%, #06B6D4 100%);
+    --grad-soft:   linear-gradient(135deg, rgba(99,102,241,0.10) 0%, rgba(6,182,212,0.10) 100%);
+    --radius:      14px;
+    --shadow-soft: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px rgba(15,23,42,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--c-bg);
+    color: var(--c-ink);
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+  }
+
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  /* ================= NAV ================= */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,251,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+  }
+  /* Logo Intelequia (arriba izquierda) */
+  .logo {
+    display: inline-flex; align-items: center; gap: 11px;
+    text-decoration: none;
+  }
+  .logo img { height: 40px; width: auto; display: block; }
+  .logo .logo-sep { width: 1px; height: 26px; background: var(--c-line); }
+  .logo .logo-tag {
+    font-size: 12px; font-weight: 700; line-height: 1.15;
+    color: var(--c-mute); letter-spacing: -0.01em;
+  }
+  .logo .logo-tag b {
+    display: block;
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @media (max-width: 600px) { .logo .logo-sep, .logo .logo-tag { display: none; } }
+  .brand { font-weight: 800; font-size: 22px; letter-spacing: -0.02em; color: var(--c-ink); text-decoration: none; }
+  .brand span {
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    font-size: 14px; font-weight: 600; color: var(--c-ink-soft);
+    text-decoration: none; transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--c-accent); }
+  .btn {
+    display: inline-block;
+    background: var(--grad-brand); color: #fff;
+    font-weight: 700; font-size: 15px;
+    padding: 12px 26px; border-radius: 999px;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(99,102,241,0.45); }
+  .btn.small { font-size: 14px; padding: 9px 20px; }
+  .btn.ghost {
+    background: var(--c-surface); color: var(--c-accent);
+    border: 1.5px solid var(--c-accent); box-shadow: none;
+  }
+  .btn.ghost:hover { background: var(--grad-soft); }
+
+  @media (max-width: 760px) { .nav-links a:not(.btn) { display: none; } }
+
+  /* ================= HERO ================= */
+  header.hero {
+    position: relative; overflow: hidden;
+    padding: 88px 0 72px;
+  }
+  header.hero::before {
+    content: '';
+    position: absolute; top: -240px; right: -200px;
+    width: 640px; height: 640px; border-radius: 50%;
+    background: var(--grad-brand); opacity: 0.10; filter: blur(60px);
+  }
+  header.hero::after {
+    content: '';
+    position: absolute; bottom: -260px; left: -180px;
+    width: 520px; height: 520px; border-radius: 50%;
+    background: var(--grad-brand); opacity: 0.07; filter: blur(60px);
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px;
+    align-items: center; position: relative; z-index: 1;
+  }
+  @media (max-width: 920px) { .hero-grid { grid-template-columns: 1fr; } }
+
+  .kicker {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--c-accent);
+    background: var(--grad-soft);
+    border: 1px solid var(--c-line);
+    padding: 6px 16px; border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  h1 {
+    font-size: clamp(34px, 5vw, 54px);
+    font-weight: 800; line-height: 1.08; letter-spacing: -0.025em;
+    margin-bottom: 22px;
+  }
+  h1 em {
+    font-style: normal;
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p.lead { font-size: 18px; color: var(--c-ink-soft); margin-bottom: 32px; max-width: 560px; }
+  .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 34px; }
+
+  .hero-badges { display: flex; gap: 22px; flex-wrap: wrap; }
+  .hero-badges div {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13.5px; font-weight: 600; color: var(--c-mute);
+  }
+  .hero-badges b { color: var(--c-good); font-size: 15px; }
+
+  /* hero side card */
+  .hero-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 30px 32px;
+    position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: var(--grad-brand);
+  }
+  .hero-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+  .hero-card ul { list-style: none; }
+  .hero-card li {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px dashed var(--c-line);
+    font-size: 14px; color: var(--c-ink-soft);
+  }
+  .hero-card li:last-child { border-bottom: none; }
+  .hero-card li .num {
+    flex: none; width: 30px; height: 30px; border-radius: 9px;
+    background: var(--grad-brand); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px;
+  }
+  .hero-card li b { color: var(--c-ink); }
+
+  /* ================= STATS STRIP ================= */
+  .stats-strip { border-block: 1px solid var(--c-line); background: var(--c-surface); }
+  .stats-inner {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: 30px 0; gap: 24px; text-align: center;
+  }
+  @media (max-width: 760px) { .stats-inner { grid-template-columns: repeat(2, 1fr); } }
+  .stats-inner b {
+    display: block; font-size: 34px; font-weight: 800;
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stats-inner span {
+    font-size: 12px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.07em; color: var(--c-mute);
+  }
+
+  /* ================= SECTIONS ================= */
+  section { padding: 76px 0; }
+  .section-head { max-width: 720px; margin-bottom: 44px; }
+  h2 {
+    font-size: clamp(26px, 3.4vw, 38px);
+    font-weight: 800; letter-spacing: -0.02em; line-height: 1.12;
+    margin-bottom: 14px;
+  }
+  h2::after {
+    content: '';
+    display: block; width: 64px; height: 4px; margin-top: 16px;
+    border-radius: 999px; background: var(--grad-brand);
+  }
+  .section-head p { font-size: 16.5px; color: var(--c-ink-soft); }
+
+  /* benefit cards */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 920px) { .grid-3 { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 28px;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,23,42,0.10); }
+  .card .icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: var(--grad-soft); border: 1px solid var(--c-line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 18px;
+  }
+  .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .card p { font-size: 14.5px; color: var(--c-ink-soft); }
+
+  /* ================= MODULES ================= */
+  #modulos { background: var(--c-surface); border-block: 1px solid var(--c-line); }
+  .module {
+    background: var(--c-bg);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 26px;
+    box-shadow: var(--shadow-soft);
+  }
+  .module-head {
+    display: flex; align-items: center; gap: 20px;
+    padding: 22px 30px;
+    background: var(--grad-soft);
+    border-bottom: 1px solid var(--c-line);
+    flex-wrap: wrap;
+  }
+  .module-num {
+    width: 46px; height: 46px; border-radius: 13px; flex: none;
+    background: var(--grad-brand); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 21px;
+  }
+  .module-head h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; }
+  .module-head .meta {
+    margin-left: auto; text-align: right;
+    font-size: 12px; font-weight: 600; color: var(--c-mute);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .module-head .meta b { display: block; color: var(--c-accent); font-size: 15px; }
+  .module-body {
+    padding: 26px 30px;
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 32px;
+  }
+  @media (max-width: 820px) { .module-body { grid-template-columns: 1fr; } }
+  .module-body p.desc { font-size: 15px; color: var(--c-ink-soft); margin-bottom: 14px; }
+  .module-body ul { list-style: none; }
+  .module-body li {
+    font-size: 14px; color: var(--c-ink-soft);
+    padding-left: 20px; position: relative; margin-bottom: 8px;
+  }
+  .module-body li::before {
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--grad-brand);
+  }
+  .pill {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 3px 12px; border-radius: 999px; margin-left: 10px;
+    vertical-align: middle;
+    background: rgba(245,158,11,0.12); color: #B45309;
+    border: 1px solid rgba(245,158,11,0.35);
+  }
+
+  /* ================= AUDIENCE / CASE ================= */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  @media (max-width: 880px) { .split { grid-template-columns: 1fr; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .chip {
+    font-size: 14px; font-weight: 600; color: var(--c-ink-soft);
+    background: var(--c-surface); border: 1px solid var(--c-line);
+    border-radius: 999px; padding: 8px 18px;
+  }
+  .check-list { list-style: none; margin-top: 8px; }
+  .check-list li {
+    font-size: 15px; color: var(--c-ink-soft);
+    padding-left: 30px; position: relative; margin-bottom: 13px;
+  }
+  .check-list li::before {
+    content: '✓';
+    position: absolute; left: 0; top: -1px;
+    width: 21px; height: 21px; border-radius: 7px;
+    background: rgba(16,185,129,0.12); color: var(--c-good);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px;
+  }
+  .check-list b { color: var(--c-ink); }
+
+  /* case banner */
+  .case-banner {
+    margin-top: 64px;
+    background: #0F172A; color: #E2E8F0;
+    border-radius: var(--radius);
+    padding: 38px 42px;
+    position: relative; overflow: hidden;
+  }
+  .case-banner::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: var(--grad-brand);
+  }
+  .case-banner h3 { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .case-banner p { font-size: 15px; color: #94A3B8; max-width: 820px; }
+  .case-banner code {
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+    font-size: 0.9em; color: #A5B4FC;
+    background: rgba(99,102,241,0.15);
+    padding: 2px 8px; border-radius: 6px;
+  }
+
+  /* ================= FAQ ================= */
+  .faq details {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+  .faq summary {
+    cursor: pointer; list-style: none;
+    padding: 20px 26px;
+    font-size: 16px; font-weight: 700;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  }
+  .faq summary::after {
+    content: '+'; font-size: 24px; font-weight: 400; color: var(--c-accent);
+    transition: transform .2s; flex: none;
+  }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details > div {
+    padding: 0 26px 22px;
+    font-size: 14.5px; color: var(--c-ink-soft);
+  }
+
+  /* ================= CTA / FORM ================= */
+  #contacto { background: var(--c-surface); border-top: 1px solid var(--c-line); }
+  .cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  @media (max-width: 880px) { .cta-grid { grid-template-columns: 1fr; } }
+
+  form {
+    background: var(--c-bg);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 34px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+  label { display: block; margin-bottom: 16px; }
+  label span {
+    display: block; font-size: 13px; font-weight: 600;
+    color: var(--c-ink-soft); margin-bottom: 6px;
+  }
+  input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+    width: 100%;
+    font-family: inherit; font-size: 15px; color: var(--c-ink);
+    background: var(--c-surface);
+    border: 1.5px solid var(--c-line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+  }
+  .privacy {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 12.5px; color: var(--c-mute); margin: 6px 0 20px;
+  }
+  .privacy input { margin-top: 3px; }
+  .privacy a { color: var(--c-accent); }
+  .form-note { font-size: 12px; color: var(--c-mute); margin-top: 14px; }
+  .form-success {
+    display: none;
+    background: rgba(16,185,129,0.10);
+    border: 1px solid rgba(16,185,129,0.4);
+    color: #047857; font-weight: 600; font-size: 14.5px;
+    border-radius: 10px; padding: 16px 18px; margin-top: 18px;
+  }
+
+  /* ================= FOOTER ================= */
+  footer {
+    background: #0F172A; color: #94A3B8;
+    padding: 44px 0 36px;
+  }
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 24px; flex-wrap: wrap;
+  }
+  footer .brand { color: #fff; }
+  footer p { font-size: 13px; }
+  footer a { color: #A5B4FC; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  .footer-links { display: flex; gap: 22px; font-size: 13px; flex-wrap: wrap; }
+  .footer-logo { display: flex; align-items: center; gap: 14px; }
+  .footer-logo img {
+    height: 38px; width: auto;
+    /* el SVG es gris; lo llevamos a blanco sobre fondo oscuro */
+    filter: brightness(0) invert(1); opacity: 0.92;
+  }
+
+  /* ===================== GRAPHICS & ANIMATIONS ===================== */
+
+  /* Animated gradient blobs */
+  @keyframes blob-float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%      { transform: translate(28px, -26px) scale(1.07); }
+    66%      { transform: translate(-22px, 18px) scale(0.95); }
+  }
+  @keyframes float-y {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-14px); }
+  }
+  @keyframes float-y-slow {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-22px); }
+  }
+  @keyframes spin-slow { to { transform: rotate(360deg); } }
+  @keyframes pulse-ring {
+    0%   { transform: scale(0.85); opacity: 0.7; }
+    70%  { transform: scale(1.25); opacity: 0; }
+    100% { transform: scale(1.25); opacity: 0; }
+  }
+  @keyframes shimmer { 100% { background-position: 200% 0; } }
+  @keyframes dash-move { to { stroke-dashoffset: -1000; } }
+  @keyframes bar-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes draw-line { to { stroke-dashoffset: 0; } }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .blob {
+    position: absolute; border-radius: 50%;
+    background: var(--grad-brand); filter: blur(60px);
+    pointer-events: none; z-index: 0;
+    animation: blob-float 16s ease-in-out infinite;
+  }
+
+  /* Dotted grid texture overlay for dark sections */
+  .grid-dots {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background-image: radial-gradient(rgba(148,163,184,0.18) 1px, transparent 1px);
+    background-size: 22px 22px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 40%, transparent 75%);
+            mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, #000 40%, transparent 75%);
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0; transform: translateY(26px);
+    transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible { opacity: 1; transform: none; }
+  .reveal[data-delay="1"] { transition-delay: .08s; }
+  .reveal[data-delay="2"] { transition-delay: .16s; }
+  .reveal[data-delay="3"] { transition-delay: .24s; }
+  .reveal[data-delay="4"] { transition-delay: .32s; }
+  .reveal[data-delay="5"] { transition-delay: .40s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1 !important; transform: none !important; transition: none; }
+    .blob, .hero-card, .float-chip, .pulse, .mock-bar, .mock-line, .tech-track { animation: none !important; }
+  }
+
+  /* ===== Hero dashboard mockup ===== */
+  .hero-visual { position: relative; }
+  .mockup {
+    position: relative; z-index: 1;
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(15,23,42,0.16), 0 4px 14px rgba(15,23,42,0.06);
+    overflow: hidden;
+    animation: float-y-slow 7s ease-in-out infinite;
+  }
+  .mockup-bar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 12px 16px; border-bottom: 1px solid var(--c-line);
+    background: linear-gradient(180deg, #fff, #FAFAFB);
+  }
+  .mockup-bar i { width: 11px; height: 11px; border-radius: 50%; background: #FF5F57; }
+  .mockup-bar i:nth-child(2) { background: #FEBC2E; }
+  .mockup-bar i:nth-child(3) { background: #28C840; }
+  .mockup-bar .url {
+    margin-left: 10px; flex: 1; height: 20px; border-radius: 6px;
+    background: var(--grad-soft); border: 1px solid var(--c-line);
+    display: flex; align-items: center; padding: 0 10px;
+    font-size: 10.5px; font-weight: 600; color: var(--c-mute);
+  }
+  .mockup-body { padding: 18px; display: grid; gap: 14px; }
+  .mk-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .mk-kpi {
+    background: var(--grad-soft); border: 1px solid var(--c-line);
+    border-radius: 12px; padding: 12px;
+  }
+  .mk-kpi small { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--c-mute); }
+  .mk-kpi b { display: block; font-size: 19px; font-weight: 800; color: var(--c-ink); margin-top: 3px; }
+  .mk-kpi b span {
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .mk-chart {
+    background: var(--c-surface); border: 1px solid var(--c-line);
+    border-radius: 12px; padding: 14px 14px 8px;
+  }
+  .mk-chart .legend { display: flex; gap: 12px; margin-bottom: 10px; }
+  .mk-chart .legend span { font-size: 9.5px; font-weight: 600; color: var(--c-mute); display: flex; align-items: center; gap: 5px; }
+  .mk-chart .legend i { width: 9px; height: 9px; border-radius: 3px; }
+  .mk-bars { display: flex; align-items: flex-end; gap: 9px; height: 84px; }
+  .mock-bar {
+    flex: 1; border-radius: 6px 6px 0 0;
+    background: var(--grad-brand);
+    transform-origin: bottom; transform: scaleY(0);
+    animation: bar-grow .9s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .mock-bar:nth-child(1) { animation-delay: .15s; opacity: .55; }
+  .mock-bar:nth-child(2) { animation-delay: .25s; opacity: .7; }
+  .mock-bar:nth-child(3) { animation-delay: .35s; opacity: .8; }
+  .mock-bar:nth-child(4) { animation-delay: .45s; }
+  .mock-bar:nth-child(5) { animation-delay: .55s; opacity: .85; }
+  .mock-bar:nth-child(6) { animation-delay: .65s; opacity: .7; }
+  .mock-bar:nth-child(7) { animation-delay: .75s; opacity: .9; }
+
+  .mk-line svg { width: 100%; height: 56px; display: block; }
+  .mock-line {
+    fill: none; stroke: url(#lineGrad); stroke-width: 3; stroke-linecap: round;
+    stroke-dasharray: 1000; stroke-dashoffset: 1000;
+    animation: draw-line 2.2s ease forwards .5s;
+  }
+
+  /* Floating chips around the mockup */
+  .float-chip {
+    position: absolute; z-index: 2;
+    background: var(--c-surface); border: 1px solid var(--c-line);
+    border-radius: 12px; box-shadow: var(--shadow-soft);
+    padding: 9px 13px; display: flex; align-items: center; gap: 9px;
+    font-size: 12.5px; font-weight: 700; color: var(--c-ink);
+  }
+  .float-chip .ic {
+    width: 26px; height: 26px; border-radius: 8px; flex: none;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    background: var(--grad-soft); border: 1px solid var(--c-line);
+  }
+  .float-chip small { display: block; font-size: 9.5px; font-weight: 600; color: var(--c-mute); }
+  .float-chip.fc1 { top: -22px; left: -26px; animation: float-y 5s ease-in-out infinite; }
+  .float-chip.fc2 { bottom: 36px; right: -30px; animation: float-y 6s ease-in-out infinite .4s; }
+  .float-chip.fc3 { bottom: -20px; left: 24px; animation: float-y 5.5s ease-in-out infinite .8s; }
+  @media (max-width: 920px) { .float-chip { display: none; } }
+
+  /* Pulse dot */
+  .pulse { position: relative; width: 9px; height: 9px; }
+  .pulse b { position: absolute; inset: 0; border-radius: 50%; background: var(--c-good); }
+  .pulse::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: var(--c-good); animation: pulse-ring 1.8s ease-out infinite;
+  }
+
+  /* Icons get a subtle float on hover-section */
+  .card .icon { animation: float-y 6s ease-in-out infinite; }
+  .card:nth-child(2n) .icon { animation-duration: 7s; animation-delay: .5s; }
+  .card:nth-child(3n) .icon { animation-duration: 8s; animation-delay: .9s; }
+
+  /* ===== Tech logos marquee ===== */
+  .tech-strip { padding: 38px 0; border-block: 1px solid var(--c-line); background: var(--c-surface); overflow: hidden; }
+  .tech-strip .label {
+    text-align: center; font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--c-mute); margin-bottom: 22px;
+  }
+  .tech-viewport { position: relative; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+  .tech-track { display: flex; gap: 24px; width: max-content; animation: marquee 28s linear infinite; }
+  .tech-strip:hover .tech-track { animation-play-state: paused; }
+  .tech-item {
+    display: flex; align-items: center; gap: 11px;
+    background: var(--c-bg); border: 1px solid var(--c-line);
+    border-radius: 999px; padding: 11px 20px; white-space: nowrap;
+    font-size: 14.5px; font-weight: 700; color: var(--c-ink-soft);
+  }
+  .tech-item svg { flex: none; }
+
+  /* Count-up tabular figures */
+  .stats-inner b { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav>
+  <div class="container nav-inner">
+    <a class="logo" href="https://intelequia.com/es" aria-label="Intelequia — inicio">
+      <img src="intelequia-logo.svg" alt="Intelequia" width="246" height="102">
+      <span class="logo-sep"></span>
+      <span class="logo-tag">Formación<b>Microsoft Fabric</b></span>
+    </a>
+    <div class="nav-links">
+      <a href="#beneficios">Por qué este curso</a>
+      <a href="#modulos">Programa</a>
+      <a href="#audiencia">Para quién</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn small" href="#contacto">Solicitar información</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <span class="blob" style="top:-240px; right:-200px; width:560px; height:560px; opacity:.10;"></span>
+  <span class="blob" style="bottom:-260px; left:-180px; width:460px; height:460px; opacity:.07; animation-duration:20s;"></span>
+  <div class="container hero-grid">
+    <div>
+      <span class="kicker">Formación Data &amp; AI · Master class práctica</span>
+      <h1>Formación en <em>Microsoft Fabric</em> para equipos de Data</h1>
+      <p class="lead">
+        Capacita a tu equipo para trabajar con Microsoft Fabric de forma práctica y eficiente:
+        de la ingesta al modelo semántico, con gobierno del dato con <strong>Microsoft Purview</strong>
+        y la nueva capa de inteligencia <strong>Fabric IQ</strong>. Diseñado para que analistas,
+        perfiles técnicos y equipos de datos apliquen la plataforma en su día a día desde el primer momento.
+      </p>
+      <div class="hero-ctas">
+        <a class="btn" href="#contacto">Quiero más información →</a>
+        <a class="btn ghost" href="#modulos">Ver el programa</a>
+      </div>
+      <div class="hero-badges">
+        <div><b>✓</b> Bonificable FUNDAE</div>
+        <div><b>✓</b> Presencial, remoto o mixto</div>
+        <div><b>✓</b> Material y assets incluidos</div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Floating chips -->
+      <div class="float-chip fc1">
+        <span class="ic">⚡</span>
+        <span>OneLake<small>1 copia, todo el dato</small></span>
+      </div>
+      <div class="float-chip fc2">
+        <span class="ic">🤖</span>
+        <span>Data Agent<small>Q&amp;A en lenguaje natural</small></span>
+      </div>
+      <div class="float-chip fc3">
+        <span class="pulse"><b></b></span>
+        <span>Real-Time<small>Eventhouse · KQL en vivo</small></span>
+      </div>
+
+      <!-- Dashboard mockup -->
+      <div class="mockup" role="img" aria-label="Panel de ejemplo de Microsoft Fabric con KPIs y gráficos">
+        <div class="mockup-bar">
+          <i></i><i></i><i></i>
+          <span class="url">app.fabric.microsoft.com · Aurora Energía</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mk-kpis">
+            <div class="mk-kpi"><small>Ventas mes</small><b>€<span class="cu" data-to="2.4" data-dec="1">0</span>M</b></div>
+            <div class="mk-kpi"><small>Estaciones</small><b><span class="cu" data-to="128">0</span></b></div>
+            <div class="mk-kpi"><small>Demanda kWh</small><b><span class="cu" data-to="94">0</span>%</b></div>
+          </div>
+          <div class="mk-chart">
+            <div class="legend">
+              <span><i style="background:#6366F1;"></i>Carburante</span>
+              <span><i style="background:#06B6D4;"></i>Eléctrico</span>
+            </div>
+            <div class="mk-bars">
+              <span class="mock-bar" style="height:48%"></span><span class="mock-bar" style="height:66%"></span><span class="mock-bar" style="height:54%"></span>
+              <span class="mock-bar" style="height:88%"></span><span class="mock-bar" style="height:62%"></span><span class="mock-bar" style="height:74%"></span>
+              <span class="mock-bar" style="height:94%"></span>
+            </div>
+          </div>
+          <div class="mk-chart mk-line">
+            <svg viewBox="0 0 320 56" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#6366F1"/>
+                  <stop offset="0.5" stop-color="#8B5CF6"/>
+                  <stop offset="1" stop-color="#06B6D4"/>
+                </linearGradient>
+              </defs>
+              <path class="mock-line" d="M2,46 C40,40 60,18 96,22 C132,26 150,44 188,38 C226,32 250,8 286,12 L318,10"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== TECH LOGOS ===================== -->
+<div class="tech-strip">
+  <div class="container">
+    <div class="label">Tecnologías que dominará tu equipo</div>
+  </div>
+  <div class="tech-viewport">
+    <div class="tech-track">
+      <!-- set A -->
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6" fill="#0EA5E9"/><rect x="13.5" y="2.5" width="8" height="8" rx="1.6" fill="#6366F1"/><rect x="2.5" y="13.5" width="8" height="8" rx="1.6" fill="#8B5CF6"/><rect x="13.5" y="13.5" width="8" height="8" rx="1.6" fill="#06B6D4"/></svg>Microsoft Fabric</span>
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#10B981" stroke-width="2"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Microsoft Purview</span>
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="#F59E0B" opacity=".18"/><path d="M12 5v7l5 3" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>Fabric IQ</span>
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="13" width="4" height="8" rx="1" fill="#F2C811"/><rect x="10" y="8" width="4" height="13" rx="1" fill="#F2C811"/><rect x="17" y="3" width="4" height="18" rx="1" fill="#E8A800"/></svg>Power BI</span>
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7l8-4 8 4v10l-8 4-8-4z" stroke="#6366F1" stroke-width="2" stroke-linejoin="round"/><path d="M4 7l8 4 8-4M12 11v10" stroke="#6366F1" stroke-width="2" stroke-linejoin="round"/></svg>OneLake</span>
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 16a4 4 0 010-8 5 5 0 019.6-1.5A3.5 3.5 0 1118 16z" stroke="#06B6D4" stroke-width="2" stroke-linejoin="round"/></svg>Data Pipelines</span>
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="7" cy="7" r="2.5" fill="#8B5CF6"/><circle cx="17" cy="7" r="2.5" fill="#06B6D4"/><circle cx="12" cy="17" r="2.5" fill="#6366F1"/><path d="M8.7 8.7l2.4 6M15.3 8.7l-2.4 6M9 7h6" stroke="#94A3B8" stroke-width="1.5"/></svg>Spark &amp; Notebooks</span>
+      <span class="tech-item"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6c0-1.7 4-3 9-3s9 1.3 9 3-4 3-9 3-9-1.3-9-3z" stroke="#0EA5E9" stroke-width="2"/><path d="M3 6v12c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12c0 1.7 4 3 9 3s9-1.3 9-3" stroke="#0EA5E9" stroke-width="2"/></svg>Warehouse &amp; SQL</span>
+      <!-- set B (duplicate for seamless loop) -->
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6" fill="#0EA5E9"/><rect x="13.5" y="2.5" width="8" height="8" rx="1.6" fill="#6366F1"/><rect x="2.5" y="13.5" width="8" height="8" rx="1.6" fill="#8B5CF6"/><rect x="13.5" y="13.5" width="8" height="8" rx="1.6" fill="#06B6D4"/></svg>Microsoft Fabric</span>
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#10B981" stroke-width="2"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Microsoft Purview</span>
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="#F59E0B" opacity=".18"/><path d="M12 5v7l5 3" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>Fabric IQ</span>
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="13" width="4" height="8" rx="1" fill="#F2C811"/><rect x="10" y="8" width="4" height="13" rx="1" fill="#F2C811"/><rect x="17" y="3" width="4" height="18" rx="1" fill="#E8A800"/></svg>Power BI</span>
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7l8-4 8 4v10l-8 4-8-4z" stroke="#6366F1" stroke-width="2" stroke-linejoin="round"/><path d="M4 7l8 4 8-4M12 11v10" stroke="#6366F1" stroke-width="2" stroke-linejoin="round"/></svg>OneLake</span>
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 16a4 4 0 010-8 5 5 0 019.6-1.5A3.5 3.5 0 1118 16z" stroke="#06B6D4" stroke-width="2" stroke-linejoin="round"/></svg>Data Pipelines</span>
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="7" cy="7" r="2.5" fill="#8B5CF6"/><circle cx="17" cy="7" r="2.5" fill="#06B6D4"/><circle cx="12" cy="17" r="2.5" fill="#6366F1"/><path d="M8.7 8.7l2.4 6M15.3 8.7l-2.4 6M9 7h6" stroke="#94A3B8" stroke-width="1.5"/></svg>Spark &amp; Notebooks</span>
+      <span class="tech-item" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6c0-1.7 4-3 9-3s9 1.3 9 3-4 3-9 3-9-1.3-9-3z" stroke="#0EA5E9" stroke-width="2"/><path d="M3 6v12c0 1.7 4 3 9 3s9-1.3 9-3V6M3 12c0 1.7 4 3 9 3s9-1.3 9-3" stroke="#0EA5E9" stroke-width="2"/></svg>Warehouse &amp; SQL</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STATS ===================== -->
+<div class="stats-strip">
+  <div class="container stats-inner">
+    <div class="reveal"><b><span class="cu" data-to="12" data-suffix=" h" data-prefix="8–">8–12 h</span></b><span>de formación intensiva</span></div>
+    <div class="reveal" data-delay="1"><b><span class="cu" data-to="3">3</span></b><span>jornadas de 4 horas</span></div>
+    <div class="reveal" data-delay="2"><b><span class="cu" data-to="18">18</span></b><span>ejercicios guiados</span></div>
+    <div class="reveal" data-delay="3"><b><span class="cu" data-to="25">25</span></b><span>alumnos máx. por edición</span></div>
+  </div>
+</div>
+
+<!-- ===================== BENEFITS ===================== -->
+<section id="beneficios">
+  <div class="container">
+    <div class="section-head">
+      <h2>No es otro curso de "dónde está el botón"</h2>
+      <p>Formación con criterio: tu equipo aprende a elegir la pieza correcta de Fabric para cada caso y a construir, gobernar y explotar la plataforma con confianza.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal">
+        <div class="icon">⚡</div>
+        <h3>Caso de negocio end-to-end</h3>
+        <p>Todo el curso gira en torno a <strong>Aurora Energía</strong>, una compañía ficticia con estaciones de servicio, comercializadora eléctrica y logística. Cada ejercicio construye sobre el anterior: el alumno termina con un entorno analítico completo y funcional sobre su propio trial de Fabric.</p>
+      </div>
+      <div class="card reveal" data-delay="1">
+        <div class="icon">🧭</div>
+        <h3>Criterio arquitectónico</h3>
+        <p>¿Lakehouse o Warehouse? ¿Dataflow Gen2 o Pipeline? ¿Eventhouse o Spark Streaming? Aprenderás a <strong>elegir la pieza correcta</strong> para cada escenario y a planificar una hoja de ruta de adopción realista para tu organización.</p>
+      </div>
+      <div class="card reveal" data-delay="2">
+        <div class="icon">📦</div>
+        <h3>Material que se queda contigo</h3>
+        <p>Repositorio completo con teoría, <strong>packs de ejercicios para casa</strong> (~3–4 h por jornada) con checklist de validación, datasets sintéticos, scripts SQL/KQL, notebooks PySpark y canal de soporte asíncrono entre jornadas.</p>
+      </div>
+      <div class="card reveal">
+        <div class="icon">🛡️</div>
+        <h3>Gobierno desde el día uno</h3>
+        <p>Una jornada completa dedicada a <strong>Microsoft Purview</strong>: Data Map, catálogo unificado, clasificación, etiquetas de sensibilidad y DLP, integrados extremo a extremo con Fabric. El dato gobernado es la base de cualquier estrategia de IA.</p>
+      </div>
+      <div class="card reveal" data-delay="1">
+        <div class="icon">🤖</div>
+        <h3>Lo último: Fabric IQ y Data Agents</h3>
+        <p>Construirás un <strong>Data Agent real</strong> capaz de responder preguntas en lenguaje natural sobre los datos corporativos, y conocerás el roadmap de Fabric IQ: Ontology, Graph y agentes de operaciones.</p>
+      </div>
+      <div class="card reveal" data-delay="2">
+        <div class="icon">📈</div>
+        <h3>Ampliable a MLOps</h3>
+        <p>Jornada opcional de Machine Learning con 3 casos: <strong>forecast de demanda</strong>, <strong>detección de fraude en tiempo real</strong> y <strong>segmentación B2B</strong>. Ciclo completo: features → MLflow → scoring → drift → reentrenamiento.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MODULES ===================== -->
+<section id="modulos" style="position:relative; overflow:hidden;">
+  <span class="blob" style="top:-180px; left:-160px; width:420px; height:420px; opacity:.06; animation-duration:22s;"></span>
+  <div class="container" style="position:relative; z-index:1;">
+    <div class="section-head reveal">
+      <h2>Programa: 3 módulos, un mismo hilo conductor</h2>
+      <p>Núcleo de 8 horas (módulos 1 y 2) ampliable a 12 horas con el módulo opcional de MLOps. Jornadas de 4 horas con descanso, demos en vivo y ejercicios en aula.</p>
+    </div>
+
+    <!-- Módulo 1 -->
+    <div class="module reveal">
+      <div class="module-head">
+        <div class="module-num">1</div>
+        <h3>Microsoft Fabric — Plataforma analítica end-to-end</h3>
+        <div class="meta"><b>4 horas</b>Jornada 1</div>
+      </div>
+      <div class="module-body">
+        <div>
+          <p class="desc">Visión completa de Fabric construyendo un flujo real de datos: desde la ingesta hasta el reporte en Power BI, pasando por Spark y la analítica en tiempo real.</p>
+          <ul>
+            <li>Fundamentos: arquitectura, capacidades, licencias y OneLake</li>
+            <li>Lakehouse, Warehouse y SQL endpoint: cuándo usar cada uno</li>
+            <li>Ingesta con Dataflow Gen2 y Data Pipelines</li>
+            <li>Notebooks, Spark y arquitectura medallion (Bronze → Silver → Gold)</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>Warehouse en profundidad y modo Direct Lake</li>
+            <li>Real-Time Intelligence: Eventhouse y consultas KQL</li>
+            <li>Power BI sobre Fabric: modelo semántico y reportes</li>
+            <li><strong>Práctica:</strong> workspace, lakehouse, dataflow, pipeline, notebook Bronze→Silver, warehouse y modelo Direct Lake</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulo 2 -->
+    <div class="module reveal" data-delay="1">
+      <div class="module-head">
+        <div class="module-num">2</div>
+        <h3>Microsoft Purview + Fabric IQ — Gobierno e inteligencia</h3>
+        <div class="meta"><b>4 horas</b>Jornada 2</div>
+      </div>
+      <div class="module-body">
+        <div>
+          <p class="desc">El dato gobernado como base de la IA: catálogo y protección con Purview, y la nueva capa de razonamiento Fabric IQ con agentes de datos en lenguaje natural.</p>
+          <ul>
+            <li>Panorama de gobierno: por qué Purview y dónde encaja con Fabric</li>
+            <li>Purview Data Map y Catálogo Unificado</li>
+            <li>Information Protection, etiquetas de sensibilidad y DLP</li>
+            <li>Integración Purview ↔ Fabric: gobierno extremo a extremo</li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>Fabric IQ: qué es, arquitectura y posicionamiento</li>
+            <li>Data Agents en acción: Q&amp;A en lenguaje natural sobre tus datos</li>
+            <li>Casos de uso, mejores prácticas y hoja de ruta de adopción</li>
+            <li><strong>Práctica:</strong> clasificación de activos Fabric, etiquetas de sensibilidad y construcción de un Data Agent</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulo 3 -->
+    <div class="module reveal" data-delay="2">
+      <div class="module-head">
+        <div class="module-num">3</div>
+        <h3>MLOps en Microsoft Fabric <span class="pill">Opcional</span></h3>
+        <div class="meta"><b>4 horas</b>Jornada 3</div>
+      </div>
+      <div class="module-body">
+        <div>
+          <p class="desc">Deep dive de Machine Learning sobre Fabric con 3 casos de Aurora Energía: forecast de demanda eléctrica (regresión), detección de fraude (anomalías en tiempo real) y segmentación B2B (clustering).</p>
+          <ul>
+            <li>Fundamentos de Data Science en Fabric</li>
+            <li>Feature engineering a escala sobre OneLake</li>
+            <li>Experimentación y registro de modelos con MLflow</li>
+            <li>Scoring batch con <code style="font-family:'JetBrains Mono',monospace;font-size:0.9em;background:var(--grad-soft);padding:1px 6px;border-radius:5px;border:1px solid var(--c-line);">PREDICT</code></li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li>Scoring en tiempo real con Eventhouse y Activator</li>
+            <li>Gobierno de ML con Purview y Fabric IQ</li>
+            <li>Monitorización, drift y reentrenamiento</li>
+            <li>Cuándo salir de Fabric: Azure ML y Microsoft Foundry</li>
+            <li><strong>Práctica:</strong> pipeline ML completo, de las features al reentrenamiento</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AUDIENCE ===================== -->
+<section id="audiencia">
+  <div class="container">
+    <div class="split">
+      <div>
+        <h2>¿A quién va dirigido?</h2>
+        <p style="margin-top:14px; color:var(--c-ink-soft); font-size:16px;">
+          A cualquier perfil que trabaje con datos y quiera dominar la plataforma analítica
+          unificada de Microsoft. No se requiere experiencia previa en Fabric.
+        </p>
+        <div class="chips" style="margin-top:22px;">
+          <span class="chip">Analistas de datos</span>
+          <span class="chip">Data Engineers</span>
+          <span class="chip">Arquitectos de datos</span>
+          <span class="chip">Desarrolladores BI</span>
+          <span class="chip">Responsables de gobierno</span>
+          <span class="chip">Data Scientists</span>
+          <span class="chip">IT Managers / CDO</span>
+        </div>
+      </div>
+      <div>
+        <h2>Al finalizar, tu equipo sabrá</h2>
+        <ul class="check-list" style="margin-top:20px;">
+          <li>Entender la <b>arquitectura de Fabric</b> (OneLake, capacidades, workspaces) y dimensionar licencias.</li>
+          <li>Construir un flujo <b>end-to-end</b>: ingesta → transformación → modelo semántico → visualización.</li>
+          <li>Aplicar <b>gobierno con Purview</b>: catálogo, clasificación, sensibilidad y DLP integrados con Fabric.</li>
+          <li>Crear <b>Data Agents con Fabric IQ</b> para Q&amp;A en lenguaje natural.</li>
+          <li>Definir la <b>hoja de ruta de adopción</b>: workloads piloto y gobierno mínimo viable.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="case-banner reveal">
+      <span class="grid-dots"></span>
+      <h3>⚡ Hilo conductor: Aurora Energía</h3>
+      <p>
+        Una compañía ficticia con red de estaciones de servicio, comercializadora eléctrica y división logística.
+        Sobre sus datos sintéticos (<code>ventas.csv</code>, <code>clientes.csv</code>, <code>telemetria_eventos.json</code>…)
+        el alumno construye incrementalmente el mismo entorno durante todo el curso: del CSV en bruto al Data Agent
+        que responde preguntas de negocio en lenguaje natural. Sin datos reales, sin riesgos, con continuidad total entre ejercicios.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section id="faq">
+  <div class="container">
+    <div class="section-head">
+      <h2>Preguntas frecuentes</h2>
+    </div>
+    <div class="faq" style="max-width: 860px;">
+      <details>
+        <summary>¿Qué necesita el alumno antes de empezar?</summary>
+        <div>Una cuenta Microsoft Entra ID (corporativa o trial) con permiso para activar el trial gratuito de Fabric (60 días), y tener instalados Power BI Desktop, VS Code y Git. Entregamos una guía de preparación paso a paso y, si hay restricciones corporativas, coordinamos alternativas con antelación.</div>
+      </details>
+      <details>
+        <summary>¿Hace falta experiencia previa en Microsoft Fabric?</summary>
+        <div>No. El curso empieza desde los fundamentos. Son recomendables conocimientos básicos de SQL y, para la jornada opcional de MLOps, nociones de Python.</div>
+      </details>
+      <details>
+        <summary>¿Tiene coste de plataforma para la empresa?</summary>
+        <div>No durante el curso: cada alumno trabaja sobre el trial gratuito de Fabric de 60 días. Si tu organización ya dispone de capacidad Fabric, podemos usar workspaces dedicados sobre la misma.</div>
+      </details>
+      <details>
+        <summary>¿En qué modalidades se imparte?</summary>
+        <div>Presencial, remoto en directo o mixto, para grupos de hasta 25 alumnos. Las jornadas de 4 horas se adaptan al calendario de tu equipo (2 ó 3 jornadas, consecutivas o espaciadas). La formación es bonificable a través de FUNDAE.</div>
+      </details>
+      <details>
+        <summary>¿La jornada de MLOps es obligatoria?</summary>
+        <div>No, es opcional. El núcleo del curso son las jornadas 1 (Fabric) y 2 (Purview + Fabric IQ), 8 horas en total. La jornada 3 amplía a 12 horas con el ciclo MLOps completo, recomendada si tu equipo tiene perfiles de Data Science o quiere explotar las capacidades de ML de Fabric.</div>
+      </details>
+      <details>
+        <summary>¿Qué soporte hay después de las clases?</summary>
+        <div>Entre jornadas se habilita un canal de soporte asíncrono (Teams o repositorio de issues) para resolver dudas de los ejercicios para casa. Además, todo el material queda disponible para uso interno del equipo.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA / CONTACT ===================== -->
+<section id="contacto">
+  <div class="container">
+    <div class="cta-grid">
+      <div>
+        <span class="kicker">Solicita información</span>
+        <h2>Diseñamos contigo la edición para tu equipo</h2>
+        <p style="margin-top:16px; font-size:16.5px; color:var(--c-ink-soft);">
+          Cuéntanos cuántas personas quieres formar y tus fechas preferidas, y te enviamos
+          la propuesta con agenda, modalidad y opciones de bonificación FUNDAE.
+        </p>
+        <ul class="check-list" style="margin-top:26px;">
+          <li>Respuesta en menos de <b>24 horas laborables</b>.</li>
+          <li>Propuesta a medida: agenda, modalidad y calendario.</li>
+          <li>Sin compromiso: la primera conversación es para entender tu caso.</li>
+        </ul>
+        <p style="margin-top:26px; font-size:14.5px; color:var(--c-mute);">
+          ¿Prefieres hablar directamente? Visítanos en
+          <a href="https://intelequia.com/es/contacto" style="color:var(--c-accent); font-weight:600;">intelequia.com/contacto</a>
+        </p>
+      </div>
+
+      <form id="lead-form" onsubmit="return handleSubmit(event)">
+        <div class="form-row">
+          <label><span>Nombre y apellidos *</span><input type="text" name="nombre" required autocomplete="name"></label>
+          <label><span>Email corporativo *</span><input type="email" name="email" required autocomplete="email"></label>
+        </div>
+        <div class="form-row">
+          <label><span>Teléfono *</span><input type="tel" name="telefono" required autocomplete="tel"></label>
+          <label><span>Empresa *</span><input type="text" name="empresa" required autocomplete="organization"></label>
+        </div>
+        <div class="form-row">
+          <label><span>Cargo *</span><input type="text" name="cargo" required autocomplete="organization-title"></label>
+          <label><span>Nº de personas a formar</span>
+            <select name="personas">
+              <option value="">Selecciona…</option>
+              <option>1–5</option>
+              <option>6–10</option>
+              <option>11–15</option>
+              <option>16–25</option>
+              <option>Más de 25</option>
+            </select>
+          </label>
+        </div>
+        <label><span>¿Qué módulos te interesan?</span>
+          <select name="modulos">
+            <option>Núcleo: Fabric + Purview/Fabric IQ (8 h)</option>
+            <option>Completo: núcleo + MLOps (12 h)</option>
+            <option>Solo Fabric (4 h)</option>
+            <option>Aún no lo sé, quiero asesoramiento</option>
+          </select>
+        </label>
+        <label><span>Mensaje (opcional)</span><textarea name="mensaje" rows="3" placeholder="Fechas preferidas, contexto del equipo, dudas…"></textarea></label>
+        <div class="privacy">
+          <input type="checkbox" id="privacidad" required>
+          <label for="privacidad" style="margin:0;">He leído y acepto la <a href="https://intelequia.com/politica-de-privacidad" target="_blank" rel="noopener">Política de Privacidad</a>. *</label>
+        </div>
+        <button class="btn" type="submit" style="width:100%;">Quiero más información →</button>
+        <p class="form-note">
+          El responsable del tratamiento es INTELEQUIA. La finalidad es atender las peticiones que nos formules
+          a través de este formulario. Puedes ejercitar tus derechos de protección de datos según se informa en
+          nuestra <a href="https://intelequia.com/politica-de-privacidad" target="_blank" rel="noopener" style="color:var(--c-accent);">política de privacidad</a>.
+        </p>
+        <div class="form-success" id="form-success">
+          ✓ ¡Gracias! Hemos registrado tu solicitud. Te contactaremos en menos de 24 horas laborables.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo">
+      <a href="https://intelequia.com/es" aria-label="Intelequia"><img src="intelequia-logo.svg" alt="Intelequia" width="246" height="102"></a>
+      <div>
+        <p style="color:#E2E8F0; font-weight:600;">Formación Microsoft Fabric</p>
+        <p style="margin-top:2px;">© 2026 Intelequia · Microsoft Solutions Partner</p>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://intelequia.com/es/servicios">Servicios</a>
+      <a href="https://intelequia.com/es/casos-de-exito">Casos de éxito</a>
+      <a href="https://intelequia.com/es/blog">Blog</a>
+      <a href="https://intelequia.com/es/contacto">Contacto</a>
+      <a href="https://intelequia.com/es/aviso-legal">Aviso legal</a>
+      <a href="https://intelequia.com/es/politica-de-privacidad">Privacidad</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Demo handler: replace the action with your CRM / marketing automation endpoint.
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = document.getElementById('lead-form');
+    if (!form.reportValidity()) return false;
+    // TODO: POST the FormData to your endpoint (e.g. Dynamics 365 / HubSpot / Power Automate).
+    document.getElementById('form-success').style.display = 'block';
+    form.querySelector('button[type="submit"]').disabled = true;
+    return false;
+  }
+
+  // ---- Scroll reveal + count-up (respects reduced motion) ----
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function countUp(el) {
+      var to = parseFloat(el.dataset.to);
+      if (isNaN(to)) return;
+      var dec = parseInt(el.dataset.dec || '0', 10);
+      var prefix = el.dataset.prefix || '';
+      var suffix = el.dataset.suffix || '';
+      var dur = 1200, start = null;
+      function frame(ts) {
+        if (!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        var val = (to * eased).toFixed(dec);
+        el.textContent = prefix + val + suffix;
+        if (p < 1) requestAnimationFrame(frame);
+        else el.textContent = prefix + to.toFixed(dec) + suffix;
+      }
+      requestAnimationFrame(frame);
+    }
+
+    var reveals = document.querySelectorAll('.reveal');
+    var counters = document.querySelectorAll('.cu');
+
+    if (reduce || !('IntersectionObserver' in window)) {
+      reveals.forEach(function (r) { r.classList.add('is-visible'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('is-visible');
+          en.target.querySelectorAll('.cu').forEach(countUp);
+          obs.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(function (r) { io.observe(r); });
+
+    // Counters that are not inside a .reveal (e.g. hero mockup) fire on their own.
+    var io2 = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { countUp(en.target); obs.unobserve(en.target); }
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(function (c) {
+      if (!c.closest('.reveal')) io2.observe(c);
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 # Curso Microsoft Fabric + Purview + Fabric IQ
 
-Master class de **8 horas**, distribuidas en **2 jornadas de 4 horas** (con un descanso de 15 minutos cada una). Pensado para grupos de hasta **25 alumnos** en formato **master class**, con demostraciones en vivo, ejercicios cortos en aula y un **bloque de práctica guiada** que el alumno completa fuera del horario de clase con los assets que se entregan en este repositorio.
+Master class de **8 horas** (núcleo) ampliable a **12 horas** con la jornada opcional de MLOps, distribuidas en **2-3 jornadas de 4 horas** (con un descanso de 15 minutos cada una). Pensado para grupos de hasta **25 alumnos** en formato **master class**, con demostraciones en vivo, ejercicios cortos en aula y un **bloque de práctica guiada** que el alumno completa fuera del horario de clase con los assets que se entregan en este repositorio.
 
 > Repositorio público de referencia: **Curso Microsoft Fabric**.
 >
@@ -48,6 +48,24 @@ Al finalizar el curso, el alumno será capaz de:
 | J2-M7 | 25 min | [Casos de uso, mejores prácticas y hoja de ruta](jornada-2-purview-fabriciq/07-casos-uso-roadmap.md) |
 | J2-M8 | 15 min | Cierre, próximos pasos, recursos y Q&A |
 
+### Jornada 3 — MLOps en Microsoft Fabric *(opcional, 4 h)*
+
+Deep dive sobre las capacidades de Machine Learning de Fabric, articulado alrededor de **tres casos** ficticios de Aurora Energía: **forecast de demanda eléctrica** (regresión), **detección de fraude** en tarjetas de fidelización (anomalías en tiempo real) y **segmentación B2B** (clustering). Se recorre el ciclo MLOps completo: feature engineering → MLflow → scoring batch y streaming → gobierno → drift → reentrenamiento.
+
+| Bloque | Duración | Tema |
+| --- | --- | --- |
+| J3-M0 | 15 min | Recapitulación J1+J2 y presentación de los 3 casos |
+| J3-M1 | 25 min | [Fundamentos de Data Science en Fabric](jornada-3-mlops/01-fundamentos-ds-fabric.md) |
+| J3-M2 | 35 min | [Feature engineering a escala sobre OneLake](jornada-3-mlops/02-feature-engineering.md) |
+| J3-M3 | 40 min | [Experimentación y registro con MLflow](jornada-3-mlops/03-experiments-mlflow.md) |
+| — | 15 min | **Descanso** |
+| J3-M4 | 30 min | [Despliegue y scoring batch con `PREDICT`](jornada-3-mlops/04-scoring-batch-predict.md) |
+| J3-M5 | 25 min | [Scoring en tiempo real y Activator](jornada-3-mlops/05-scoring-realtime-activator.md) |
+| J3-M6 | 25 min | [Gobierno de ML con Purview y Fabric IQ](jornada-3-mlops/06-gobierno-purview-fabriciq-ml.md) |
+| J3-M7 | 25 min | [Monitorización, drift y reentrenamiento](jornada-3-mlops/07-monitorizacion-drift-reentrenamiento.md) |
+| J3-M8 | 15 min | [Cuándo salir de Fabric: Azure ML y Foundry](jornada-3-mlops/08-integracion-azureml-foundry.md) |
+| J3-M9 | 15 min | Cierre, hoja de ruta MLOps y Q&A |
+
 ## Estructura de este repositorio
 
 ```
@@ -57,14 +75,17 @@ contenidos/
 ├── 00-preparacion-entorno.md       ← cómo crear la trial de Fabric paso a paso
 ├── jornada-1-fabric/               ← contenido teórico/demo de la jornada 1
 ├── jornada-2-purview-fabriciq/     ← contenido teórico/demo de la jornada 2
+├── jornada-3-mlops/                ← contenido teórico/demo de la jornada 3 (opcional, MLOps)
 ├── ejercicios/
 │   ├── jornada-1/                  ← prácticas guiadas (mayoría para casa)
-│   └── jornada-2/
+│   ├── jornada-2/
+│   └── jornada-3/
 ├── assets/
 │   ├── data/                       ← CSV/JSON de ejemplo (Aurora Energía)
 │   ├── sql/                        ← scripts T-SQL para Warehouse
 │   ├── kql/                        ← consultas KQL de ejemplo
-│   └── notebooks/                  ← notebooks PySpark/Spark SQL
+│   ├── notebooks/                  ← notebooks PySpark/Spark SQL
+│   └── ml/                         ← notebooks y datasets de la jornada 3 (MLOps)
 └── recursos.md                     ← enlaces oficiales y bibliografía
 ```
 
