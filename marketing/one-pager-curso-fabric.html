@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Pager — Curso Microsoft Fabric + Purview + Fabric IQ | Intelequia</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --c-bg:        #FAFAFB;
+    --c-surface:   #FFFFFF;
+    --c-ink:       #0F172A;
+    --c-ink-soft:  #334155;
+    --c-mute:      #64748B;
+    --c-line:      #E2E8F0;
+    --c-accent:    #6366F1;
+    --c-accent-2:  #06B6D4;
+    --c-warn:      #F59E0B;
+    --c-good:      #10B981;
+    --grad-brand:  linear-gradient(135deg, #6366F1 0%, #8B5CF6 45%, #06B6D4 100%);
+    --grad-soft:   linear-gradient(135deg, rgba(99,102,241,0.10) 0%, rgba(6,182,212,0.10) 100%);
+    --radius:      14px;
+    --shadow-soft: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px rgba(15,23,42,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #E5E7EB;
+    color: var(--c-ink);
+    letter-spacing: -0.005em;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ===== A4 pages ===== */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: var(--c-bg);
+    margin: 10mm auto;
+    padding: 14mm 16mm;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(15,23,42,0.18);
+    display: flex;
+    flex-direction: column;
+  }
+
+  @page { size: A4; margin: 0; }
+  @media print {
+    body { background: none; }
+    .page {
+      margin: 0;
+      box-shadow: none;
+      page-break-after: always;
+      width: 210mm;
+      height: 297mm;
+    }
+    .page:last-child { page-break-after: avoid; }
+  }
+
+  /* decorative dots (brand) */
+  .dots {
+    display: inline-flex; gap: 8px; align-items: center;
+  }
+  .dots i {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--c-line); display: inline-block;
+  }
+  .dots i:first-child { background: var(--grad-brand); }
+
+  /* ===== Header ===== */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8mm;
+  }
+  .brand {
+    font-weight: 800; font-size: 17px; letter-spacing: -0.02em;
+  }
+  .brand span { 
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .tag-training {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--c-mute);
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 10mm 11mm;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 7mm;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: var(--grad-brand);
+  }
+  .kicker {
+    display: inline-block;
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--c-accent);
+    background: var(--grad-soft);
+    border: 1px solid var(--c-line);
+    padding: 4px 12px; border-radius: 999px;
+    margin-bottom: 5mm;
+  }
+  h1 {
+    font-size: 33px; font-weight: 800; line-height: 1.08;
+    letter-spacing: -0.02em; margin-bottom: 4mm;
+  }
+  h1 em {
+    font-style: normal;
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero p.lead {
+    font-size: 14.5px; color: var(--c-ink-soft); max-width: 158mm;
+  }
+
+  /* ===== Stat strip ===== */
+  .stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm;
+    margin-bottom: 7mm;
+  }
+  .stat {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    padding: 5mm;
+    text-align: center;
+  }
+  .stat b {
+    display: block; font-size: 23px; font-weight: 800;
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .stat span {
+    font-size: 10.5px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--c-mute);
+  }
+
+  /* ===== Section headings ===== */
+  h2 {
+    font-size: 21px; font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 2.5mm;
+  }
+  h2::after {
+    content: '';
+    display: block; width: 48px; height: 4px; margin-top: 2mm;
+    border-radius: 999px; background: var(--grad-brand);
+  }
+  .section { margin-bottom: 6mm; }
+
+  /* ===== Two columns ===== */
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+
+  /* ===== Cards ===== */
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    padding: 5.5mm 6mm;
+  }
+  .card h3 {
+    font-size: 14px; font-weight: 700; margin-bottom: 2mm;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .card p, .card li { font-size: 11.5px; color: var(--c-ink-soft); }
+  .card ul { list-style: none; }
+  .card ul li {
+    padding-left: 14px; position: relative; margin-bottom: 1.2mm;
+  }
+  .card ul li::before {
+    content: ''; position: absolute; left: 0; top: 6px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--grad-brand);
+  }
+
+  .icon {
+    display: inline-flex; width: 22px; height: 22px;
+    border-radius: 7px; background: var(--grad-soft);
+    border: 1px solid var(--c-line);
+    align-items: center; justify-content: center; font-size: 12px;
+    flex: none;
+  }
+
+  /* ===== Module cards (page 2) ===== */
+  .module {
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    margin-bottom: 5mm;
+  }
+  .module-head {
+    display: flex; align-items: center; gap: 4mm;
+    padding: 4mm 6mm;
+    background: var(--grad-soft);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .module-num {
+    width: 34px; height: 34px; border-radius: 10px; flex: none;
+    background: var(--grad-brand); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px;
+  }
+  .module-head h3 { font-size: 15.5px; font-weight: 700; }
+  .module-head .meta {
+    margin-left: auto; text-align: right;
+    font-size: 10.5px; font-weight: 600; color: var(--c-mute);
+    text-transform: uppercase; letter-spacing: 0.05em; flex: none;
+  }
+  .module-head .meta b { display: block; color: var(--c-accent); font-size: 12px; }
+  .module-body { padding: 4mm 6mm; display: grid; grid-template-columns: 1.1fr 1fr; gap: 5mm; }
+  .module-body p.desc { font-size: 11.5px; color: var(--c-ink-soft); margin-bottom: 2mm; }
+  .module-body ul { list-style: none; columns: 1; }
+  .module-body ul li {
+    font-size: 10.8px; color: var(--c-ink-soft);
+    padding-left: 13px; position: relative; margin-bottom: 1mm;
+  }
+  .module-body ul li::before {
+    content: ''; position: absolute; left: 0; top: 5.5px;
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--grad-brand);
+  }
+  .pill {
+    display: inline-block; font-size: 9.5px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 2px 9px; border-radius: 999px; margin-left: 6px;
+    vertical-align: middle;
+  }
+  .pill.optional { background: rgba(245,158,11,0.12); color: #B45309; border: 1px solid rgba(245,158,11,0.35); }
+
+  /* ===== Audience chips ===== */
+  .chips { display: flex; flex-wrap: wrap; gap: 2.5mm; }
+  .chip {
+    font-size: 11px; font-weight: 600; color: var(--c-ink-soft);
+    background: var(--c-surface); border: 1px solid var(--c-line);
+    border-radius: 999px; padding: 4px 12px;
+  }
+
+  /* ===== CTA footer ===== */
+  .cta-box {
+    margin-top: auto;
+    background: #0F172A;
+    border-radius: var(--radius);
+    color: #E2E8F0;
+    padding: 6mm 8mm;
+    display: flex; align-items: center; justify-content: space-between; gap: 8mm;
+    position: relative; overflow: hidden;
+  }
+  .cta-box::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: var(--grad-brand);
+  }
+  .cta-box h3 { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 1.5mm; }
+  .cta-box p { font-size: 11.5px; color: #94A3B8; }
+  .cta-btn {
+    flex: none;
+    background: var(--grad-brand); color: #fff;
+    font-weight: 700; font-size: 13px;
+    padding: 11px 22px; border-radius: 999px;
+    text-decoration: none; white-space: nowrap;
+  }
+
+  .footer-note {
+    margin-top: 4mm;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 9.5px; font-weight: 500; color: var(--c-mute);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+
+  /* checklist with check icons */
+  .check-list { list-style: none; }
+  .check-list li {
+    font-size: 11.5px; color: var(--c-ink-soft);
+    padding-left: 19px; position: relative; margin-bottom: 1.8mm;
+  }
+  .check-list li::before {
+    content: '✓'; position: absolute; left: 0; top: 0;
+    color: var(--c-good); font-weight: 800; font-size: 12px;
+  }
+
+  /* ===== Logo (top-left) ===== */
+  .logo { display: inline-flex; align-items: center; gap: 9px; }
+  .logo img { height: 30px; width: auto; display: block; }
+  .logo .sep { width: 1px; height: 20px; background: var(--c-line); }
+  .logo .tag { font-size: 9.5px; font-weight: 700; line-height: 1.15; color: var(--c-mute); }
+  .logo .tag b {
+    display: block;
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  /* ===== Hero mini dashboard ===== */
+  .hero { display: grid; grid-template-columns: 1.5fr 1fr; gap: 9mm; align-items: center; }
+  .hero .hero-copy { min-width: 0; }
+  .mini {
+    background: #fff; border: 1px solid var(--c-line); border-radius: 11px;
+    box-shadow: var(--shadow-soft); overflow: hidden;
+  }
+  .mini-bar { display: flex; gap: 5px; align-items: center; padding: 6px 9px; border-bottom: 1px solid var(--c-line); background: linear-gradient(180deg,#fff,#FAFAFB); }
+  .mini-bar i { width: 7px; height: 7px; border-radius: 50%; background: #FF5F57; }
+  .mini-bar i:nth-child(2){ background:#FEBC2E; } .mini-bar i:nth-child(3){ background:#28C840; }
+  .mini-bar span { margin-left: 4px; font-size: 7.5px; font-weight: 700; color: var(--c-mute); letter-spacing: .03em; }
+  .mini-body { padding: 8px; display: grid; gap: 7px; }
+  .mini-kpis { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+  .mini-kpi { background: var(--grad-soft); border: 1px solid var(--c-line); border-radius: 7px; padding: 5px 6px; }
+  .mini-kpi small { font-size: 6.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--c-mute); }
+  .mini-kpi b { display: block; font-size: 12px; font-weight: 800; color: var(--c-ink); }
+  .mini-kpi b em {
+    font-style: normal;
+    background: var(--grad-brand);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .mini-chart { background:#fff; border: 1px solid var(--c-line); border-radius: 7px; padding: 7px 8px 5px; }
+  .mini-bars { display: flex; align-items: flex-end; gap: 4px; height: 34px; }
+  .mini-bars span { flex: 1; border-radius: 3px 3px 0 0; background: var(--grad-brand); }
+  .mini-line svg { width: 100%; height: 22px; display: block; }
+
+  /* ===== Tech badges row ===== */
+  .tech-row { display: flex; flex-wrap: wrap; gap: 2mm; margin-top: 1mm; }
+  .tech-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--c-surface); border: 1px solid var(--c-line);
+    border-radius: 999px; padding: 4px 11px;
+    font-size: 10px; font-weight: 700; color: var(--c-ink-soft);
+  }
+  .tech-badge svg { flex: none; }
+
+  /* dotted texture for the dark CTA box */
+  .cta-box .grid-dots {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(rgba(148,163,184,0.20) 1px, transparent 1px);
+    background-size: 16px 16px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 80% 50%, #000 30%, transparent 75%);
+            mask-image: radial-gradient(ellipse 70% 80% at 80% 50%, #000 30%, transparent 75%);
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ PAGE 1 -->
+<div class="page">
+  <div class="topbar">
+    <div class="logo">
+      <img src="intelequia-logo.svg" alt="Intelequia" width="246" height="102">
+      <span class="sep"></span>
+      <span class="tag">Formación<b>Microsoft Fabric</b></span>
+    </div>
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="tag-training">Formación · Data &amp; AI</div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-copy">
+      <span class="kicker">Master class · 8–12 horas · Hasta 25 alumnos</span>
+      <h1>Curso <em>Microsoft Fabric</em> + Purview + Fabric IQ</h1>
+      <p class="lead">
+        Capacita a tu equipo de datos para dominar la plataforma analítica unificada de Microsoft:
+        de la ingesta al modelo semántico, con gobierno del dato extremo a extremo y la nueva capa
+        de inteligencia Fabric IQ. Formación práctica, con demostraciones en vivo y un caso de
+        negocio unificado que el alumno construye de principio a fin.
+      </p>
+      <div class="tech-row">
+        <span class="tech-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="8" height="8" rx="1.6" fill="#0EA5E9"/><rect x="13.5" y="2.5" width="8" height="8" rx="1.6" fill="#6366F1"/><rect x="2.5" y="13.5" width="8" height="8" rx="1.6" fill="#8B5CF6"/><rect x="13.5" y="13.5" width="8" height="8" rx="1.6" fill="#06B6D4"/></svg>Fabric</span>
+        <span class="tech-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#10B981" stroke-width="2"/><path d="M8 12.5l2.5 2.5L16 9.5" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Purview</span>
+        <span class="tech-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="#F59E0B" opacity=".18"/><path d="M12 5v7l5 3" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/></svg>Fabric IQ</span>
+        <span class="tech-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="13" width="4" height="8" rx="1" fill="#F2C811"/><rect x="10" y="8" width="4" height="13" rx="1" fill="#F2C811"/><rect x="17" y="3" width="4" height="18" rx="1" fill="#E8A800"/></svg>Power BI</span>
+      </div>
+    </div>
+    <div class="mini" role="img" aria-label="Panel de ejemplo en Microsoft Fabric">
+      <div class="mini-bar"><i></i><i></i><i></i><span>app.fabric.microsoft.com · Aurora Energía</span></div>
+      <div class="mini-body">
+        <div class="mini-kpis">
+          <div class="mini-kpi"><small>Ventas</small><b><em>€2.4M</em></b></div>
+          <div class="mini-kpi"><small>Estaciones</small><b>128</b></div>
+          <div class="mini-kpi"><small>Demanda</small><b><em>94%</em></b></div>
+        </div>
+        <div class="mini-chart">
+          <div class="mini-bars">
+            <span style="height:45%;opacity:.55"></span><span style="height:68%;opacity:.7"></span>
+            <span style="height:52%;opacity:.8"></span><span style="height:85%"></span>
+            <span style="height:63%;opacity:.85"></span><span style="height:74%;opacity:.7"></span>
+            <span style="height:92%;opacity:.9"></span>
+          </div>
+        </div>
+        <div class="mini-chart mini-line">
+          <svg viewBox="0 0 200 22" preserveAspectRatio="none">
+            <defs><linearGradient id="opl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6366F1"/><stop offset="1" stop-color="#06B6D4"/></linearGradient></defs>
+            <path d="M2,18 C26,15 38,6 60,8 C84,11 96,17 118,14 C142,11 158,3 180,5 L198,4" fill="none" stroke="url(#opl)" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b>3</b><span>Jornadas de 4 h</span></div>
+    <div class="stat"><b>8+4</b><span>Horas núcleo + MLOps</span></div>
+    <div class="stat"><b>18</b><span>Ejercicios guiados</span></div>
+    <div class="stat"><b>100%</b><span>Hands-on con assets</span></div>
+  </div>
+
+  <div class="section">
+    <h2>¿Por qué este curso?</h2>
+  </div>
+  <div class="cols-3" style="margin-bottom: 7mm;">
+    <div class="card">
+      <h3><span class="icon">⚡</span>Caso real de principio a fin</h3>
+      <p>Todo el curso gira en torno a <strong>"Aurora Energía"</strong>, una compañía ficticia con estaciones de servicio, comercializadora eléctrica y logística. Cada ejercicio construye sobre el anterior: el alumno termina con un entorno analítico completo y funcional.</p>
+    </div>
+    <div class="card">
+      <h3><span class="icon">🧭</span>Criterio, no solo clics</h3>
+      <p>No enseñamos solo "dónde está el botón": el alumno aprende a <strong>elegir la pieza correcta</strong> para cada escenario — Lakehouse vs Warehouse vs Eventhouse vs Power BI — y a planificar la adopción en su organización.</p>
+    </div>
+    <div class="card">
+      <h3><span class="icon">📦</span>Material que se queda</h3>
+      <p>Repositorio completo con teoría, <strong>packs de ejercicios para casa</strong> (~3–4 h por jornada) con checklist de validación, datasets sintéticos, scripts SQL/KQL, notebooks y canal de soporte asíncrono entre jornadas.</p>
+    </div>
+  </div>
+
+  <div class="cols-2" style="margin-bottom: 7mm;">
+    <div>
+      <div class="section"><h2>Lo que tu equipo sabrá hacer</h2></div>
+      <ul class="check-list">
+        <li>Entender la arquitectura de Fabric (OneLake, capacidades, workspaces) y dimensionar licencias.</li>
+        <li>Construir un flujo end-to-end: ingesta → transformación → modelo semántico → visualización.</li>
+        <li>Aplicar gobierno con Purview: catálogo, clasificación, etiquetas de sensibilidad y DLP.</li>
+        <li>Crear Data Agents con Fabric IQ para Q&amp;A en lenguaje natural sobre los datos corporativos.</li>
+        <li>Identificar los workloads piloto y la hoja de ruta de adopción para su organización.</li>
+        <li><em>(Opcional)</em> Operar el ciclo MLOps completo en Fabric: MLflow, scoring batch/streaming y drift.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="section"><h2>¿A quién va dirigido?</h2></div>
+      <div class="chips" style="margin-bottom: 4mm;">
+        <span class="chip">Analistas de datos</span>
+        <span class="chip">Data Engineers</span>
+        <span class="chip">Arquitectos de datos</span>
+        <span class="chip">Desarrolladores BI</span>
+        <span class="chip">Responsables de gobierno del dato</span>
+        <span class="chip">Data Scientists (J3)</span>
+        <span class="chip">IT Managers / CDO</span>
+      </div>
+      <div class="card">
+        <h3><span class="icon">🎓</span>Metodología master class</h3>
+        <ul>
+          <li>Explicación + demo en vivo del formador.</li>
+          <li>2 ejercicios cortos en aula por jornada (10–15 min).</li>
+          <li>Práctica guiada fuera de aula con todos los assets.</li>
+          <li>Trial de Fabric de 60 días: sin coste de plataforma para empezar.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <span class="grid-dots"></span>
+    <div>
+      <h3>Forma a tu equipo en la plataforma de datos que lo unifica todo</h3>
+      <p>Modalidad presencial, remota o mixta · Adaptable a tu calendario · Bonificable FUNDAE</p>
+    </div>
+    <a class="cta-btn" href="https://intelequia.com/es/servicios-intelequia/formacion-fabric">Solicitar información →</a>
+  </div>
+
+  <div class="footer-note">
+    <span>intelequia.com · Microsoft Solutions Partner</span>
+    <span>Página 1 / 2</span>
+  </div>
+</div>
+
+<!-- ============================================================ PAGE 2 -->
+<div class="page">
+  <div class="topbar">
+    <div class="logo">
+      <img src="intelequia-logo.svg" alt="Intelequia" width="246" height="102">
+      <span class="sep"></span>
+      <span class="tag">Formación<b>Microsoft Fabric</b></span>
+    </div>
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="tag-training">Programa del curso</div>
+  </div>
+
+  <div class="section">
+    <h2>Los 3 módulos del programa</h2>
+    <p style="font-size:12px; color:var(--c-mute); margin-top:2mm;">
+      Núcleo de 8 horas (Jornadas 1 y 2) ampliable a 12 horas con la Jornada 3 de MLOps. Cada jornada incluye un descanso de 15 minutos y un pack de ejercicios para casa.
+    </p>
+  </div>
+
+  <!-- Módulo 1 -->
+  <div class="module">
+    <div class="module-head">
+      <div class="module-num">1</div>
+      <h3>Microsoft Fabric — Plataforma analítica end-to-end</h3>
+      <div class="meta"><b>4 horas</b>Jornada 1</div>
+    </div>
+    <div class="module-body">
+      <div>
+        <p class="desc">Visión completa de Fabric construyendo un flujo real de datos: desde la ingesta hasta el reporte en Power BI, pasando por Spark y analítica en tiempo real.</p>
+        <ul>
+          <li>Fundamentos: arquitectura, capacidades, licencias y OneLake</li>
+          <li>Lakehouse, Warehouse y SQL endpoint: cuándo usar cada uno</li>
+          <li>Ingesta con Dataflow Gen2 y Data Pipelines</li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li>Notebooks, Spark y arquitectura medallion (Bronze → Silver → Gold)</li>
+          <li>Warehouse en profundidad y modo Direct Lake</li>
+          <li>Real-Time Intelligence: Eventhouse y consultas KQL</li>
+          <li>Power BI sobre Fabric: modelo semántico y reportes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Módulo 2 -->
+  <div class="module">
+    <div class="module-head">
+      <div class="module-num">2</div>
+      <h3>Microsoft Purview + Fabric IQ — Gobierno e inteligencia</h3>
+      <div class="meta"><b>4 horas</b>Jornada 2</div>
+    </div>
+    <div class="module-body">
+      <div>
+        <p class="desc">El dato gobernado como base de la IA: catálogo y protección con Purview, y la nueva capa de razonamiento Fabric IQ con agentes de datos en lenguaje natural.</p>
+        <ul>
+          <li>Panorama de gobierno: por qué Purview, y dónde encaja con Fabric</li>
+          <li>Purview Data Map y Catálogo Unificado</li>
+          <li>Information Protection, etiquetas de sensibilidad y DLP</li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li>Integración Purview ↔ Fabric: gobierno extremo a extremo</li>
+          <li>Fabric IQ: arquitectura, posicionamiento y roadmap (Ontology, Graph)</li>
+          <li>Data Agents en acción: Q&amp;A en lenguaje natural sobre tus datos</li>
+          <li>Casos de uso, mejores prácticas y hoja de ruta de adopción</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Módulo 3 -->
+  <div class="module">
+    <div class="module-head">
+      <div class="module-num">3</div>
+      <h3>MLOps en Microsoft Fabric <span class="pill optional">Opcional</span></h3>
+      <div class="meta"><b>4 horas</b>Jornada 3</div>
+    </div>
+    <div class="module-body">
+      <div>
+        <p class="desc">Deep dive de Machine Learning sobre Fabric con 3 casos: forecast de demanda eléctrica, detección de fraude en tiempo real y segmentación B2B. Ciclo MLOps completo.</p>
+        <ul>
+          <li>Fundamentos de Data Science en Fabric</li>
+          <li>Feature engineering a escala sobre OneLake</li>
+          <li>Experimentación y registro de modelos con MLflow</li>
+        </ul>
+      </div>
+      <div>
+        <ul>
+          <li>Scoring batch con <strong>PREDICT</strong> y scoring en tiempo real con Activator</li>
+          <li>Gobierno de ML con Purview y Fabric IQ</li>
+          <li>Monitorización, drift y reentrenamiento</li>
+          <li>Cuándo salir de Fabric: Azure ML y Microsoft Foundry</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="cols-2" style="margin-bottom: 5mm;">
+    <div class="card">
+      <h3><span class="icon">🛠️</span>Requisitos para el alumno</h3>
+      <ul>
+        <li>Cuenta Microsoft Entra ID (corporativa o trial) — el curso guía la activación del trial de Fabric (60 días).</li>
+        <li>Power BI Desktop, VS Code y Git instalados (guía de preparación incluida).</li>
+        <li>No se requiere experiencia previa en Fabric; conocimientos básicos de SQL recomendables.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="icon">🏷️</span>Modalidades y formato</h3>
+      <ul>
+        <li>Presencial, remoto en directo o mixto, para grupos de hasta 25 alumnos.</li>
+        <li>2 ó 3 jornadas de 4 horas, adaptables al calendario de tu equipo.</li>
+        <li>Formación bonificable a través de FUNDAE.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cta-box">
+    <span class="grid-dots"></span>
+    <div>
+      <h3>Reserva tu convocatoria</h3>
+      <p>Escríbenos y diseñamos contigo la edición a medida para tu equipo · intelequia.com</p>
+    </div>
+    <a class="cta-btn" href="https://intelequia.com/es/contacto">Contactar ahora →</a>
+  </div>
+
+  <div class="footer-note">
+    <span>© 2026 Intelequia · Material formativo · Datos y casos 100% ficticios</span>
+    <span>Página 2 / 2</span>
+  </div>
+</div>
+
+</body>
+</html>
