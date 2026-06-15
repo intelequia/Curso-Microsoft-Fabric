@@ -17,12 +17,10 @@
 
 ### 1. ¿Dónde viven las features?
 
-- En el mismo Lakehouse, capa **silver/features**: `lh_aurora.features_*`.
+- En el mismo Lakehouse, capa **gold/features**: `lh_aurora_gold.ml_feature.features_*`.
 - Convención sugerida:
-  - `features_demanda_horaria` (granularidad: `estacion_id` × `ts_hora`).
-  - `features_cliente_fraude` (granularidad: `cliente_id` × `fecha_corte`).
-  - `features_b2b_segmentacion` (granularidad: `cliente_id`).
-- Cada tabla con columnas técnicas: `feature_version`, `generado_en`, `pipeline_run_id`.
+  - `features_forecast_demanda_horaria` (granularidad: `estacion_id` × `ts_hora`).
+  - `features_ebikes_availability` (granularidad: `estacion_id` × `ts_hora`).
 
 ### 2. Features de series temporales (caso forecast)
 
@@ -54,37 +52,7 @@ df_feat = (
     .dropna(subset=["lag_168h"])
 )
 ```
-
-### 3. Features de fraude
-
-Sobre `transacciones_fidelizacion`:
-
-- **Velocity features**: nº transacciones del cliente en últimas 1 h / 24 h / 7 días.
-- **Spread geográfico**: nº provincias distintas en últimas 24 h.
-- **Importe**: ratio del importe actual sobre la media histórica del cliente.
-- **Horario atípico**: indicador de transacción entre 02:00 y 05:00.
-
-### 4. Features de segmentación B2B
-
-- **RFM** clásico: Recencia, Frecuencia, valor Monetario (sobre 12 meses).
-- **Mix de producto**: % carburante vs. % electricidad vs. % servicios.
-- **Volatilidad** mensual de gasto (coeficiente de variación).
-
-### 5. Materialización y versionado
-
-```python
-(df_feat
-   .withColumn("feature_version", F.lit("v1.0"))
-   .withColumn("generado_en", F.current_timestamp())
-   .write.format("delta")
-   .mode("overwrite")
-   .option("overwriteSchema", "true")
-   .saveAsTable("features_demanda_horaria"))
-```
-
-> **Time travel** de Delta = re-entrenar mañana con el snapshot de hoy es un `VERSION AS OF`. Esto **es** un feature store básico.
-
-### 6. Buenas prácticas
+### 3. Buenas prácticas
 
 - Una **tabla por caso**, no una mega-tabla de features compartida.
 - **Documenta cada feature** en su columna (`COMMENT 'lag de 24h en kWh'`) → se ve en SQL endpoint y aparece en Purview.

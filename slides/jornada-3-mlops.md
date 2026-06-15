@@ -19,7 +19,7 @@ math: katex
 ### 4 horas · master class · caso *Aurora Energía*
 
 <!--
-Bienvenida a la Jornada 3. Tras dos jornadas centradas en datos y gobierno, hoy convertimos los datos en decisiones predictivas. Preguntar a la sala: ¿cuántos tienen ya modelos de ML en producción hoy? ¿En qué plataforma? Esa respuesta da el termómetro. El hilo conductor sigue siendo Aurora Energía: hoy abordamos 3 casos reales — forecast, fraude y segmentación. La meta no es enseñar ML (eso son meses), sino enseñar cómo se opera ML en Fabric de forma productiva y gobernada.
+Bienvenida a la Jornada 3. Tras dos jornadas centradas en datos y gobierno, hoy convertimos los datos en decisiones predictivas. Preguntar a la sala: ¿cuántos tienen ya modelos de ML en producción hoy? ¿En qué plataforma? Esa respuesta da el termómetro. El hilo conductor sigue siendo Aurora Energía: hoy abordamos 3 casos reales — forecast, disponibilidad de e-bikes y segmentación. La meta no es enseñar ML (eso son meses), sino enseñar cómo se opera ML en Fabric de forma productiva y gobernada.
 -->
 
 ---
@@ -43,7 +43,7 @@ Recordar a los alumnos que el workspace y las tablas que construyeron las dos jo
 | Caso | Tipo | Por qué importa |
 |---|---|---|
 | **Forecast demanda eléctrica horaria** | Regresión / series temporales | Compras al mercado mayorista |
-| **Detección de fraude** en tarjeta de fidelización | Clasificación + anomalías | Pérdida directa, < 1 min de latencia |
+| **Disponibilidad de e-bikes (Bicycles)** | Clasificación (multiclase) | Planificaciones de recarga, micro-batch < 15 min |
 | **Segmentación B2B logística** | Clustering | Campañas personalizadas |
 
 > Cubrimos las **tres familias** clásicas y todo el **ciclo MLOps** en 4 horas.
@@ -64,14 +64,15 @@ Esta tabla es el mapa mental de la jornada. Aunque hagamos demos sobre el caso d
 | **M3** | 40 | Experimentación con MLflow |
 | ☕ | 15 | **Descanso** |
 | **M4** | 30 | Scoring batch con `PREDICT` |
-| **M5** | 25 | Scoring en tiempo real + Activator |
+| **M5** | 25 | Ingesta streaming y scoring micro-batch |
 | **M6** | 25 | Gobierno con Purview + Fabric IQ |
 | **M7** | 25 | Monitorización, drift y reentrenamiento |
 | **M8** | 15 | Cuándo salir a Azure ML / Foundry |
-| **M9** | 15 | Cierre y deberes |
+| **M9** | 30 | Del modelo al agente: Foundry + Fabric |
+| **M10** | 10 | Cierre y deberes |
 
 <!--
-Mismo patrón que J1 y J2: bloques cortos + demos en vivo + descanso a mitad. M1-M3 cubren la fase de construcción. M4-M5 la de despliegue. M6-M7 la de operación gobernada. M8 el outlook hacia fuera de Fabric. M9 el cierre con los deberes en ejercicios/jornada-3/.
+Mismo patrón que J1 y J2: bloques cortos + demos en vivo + descanso a mitad. M1-M3 cubren la fase de construcción. M4-M5 la de despliegue. M6-M7 la de operación gobernada. M8 el outlook hacia fuera de Fabric. M9 materializa la integración con un agente real sobre Foundry + Fabric. M10 el cierre con los deberes.
 -->
 
 ---
@@ -135,7 +136,7 @@ Mostrar en vivo cómo se crea un Environment en el bloque demo de M1: añadir pr
 > **Pista:** SynapseML es vuestro mejor amigo cuando los datos no caben en memoria.
 
 <!--
-SynapseML viene preinstalado y es un superpoder real: convierte algoritmos clásicos (LightGBM, IsolationForest) en versiones distribuidas sobre Spark sin que cambie casi la API. En Aurora Energía lo usamos en M5 para el modelo de fraude. Copilot for Data Science (en preview o GA según región) genera celdas a partir de prompt — útil pedagógicamente pero SIEMPRE revisar el código antes de ejecutar.
+SynapseML viene preinstalado y es un superpoder real: convierte algoritmos clásicos (LightGBM, IsolationForest) en versiones distribuidas sobre Spark sin que cambie casi la API. En Aurora Energía lo usamos en M5 para entrenamiento y procesado a escala de datos del stream. Copilot for Data Science (en preview o GA según región) genera celdas a partir de prompt — útil pedagógicamente pero SIEMPRE revisar el código antes de ejecutar.
 -->
 
 ---
@@ -155,7 +156,7 @@ Transición al bloque más práctico. La tesis: un modelo sin feature engineerin
 
 ## Feature store ligero sobre OneLake
 
-- Una **tabla Delta por caso** (`features_demanda_horaria`, `features_cliente_fraude`, `features_b2b_segmentacion`).
+- Una **tabla Delta por caso** (`features_forecast_demanda_horaria`, `features_ebikes_availability`, `features_b2b_segmentacion`).
 - Columnas técnicas: `feature_version`, `generado_en`, `pipeline_run_id`.
 - **Documentadas** con `COMMENT` SQL → visibles en SQL endpoint y Purview.
 - **Time travel Delta** = snapshot reproducible: `VERSION AS OF` para re-entrenar como hace 30 días.
@@ -345,48 +346,59 @@ Es el mismo pipeline que verán en EJ3-04. Subrayar el patrón overwrite con rep
 
 <span class="module">M5 · 25 min</span>
 
-# Tiempo real con Activator
-## De evento a alerta en < 1 min
+# Streaming e Inferencia Micro-batch
+## Ingesta continua, reentrenamiento y alertas
 
 <!--
-Cambio de caso de uso: ahora hablamos del modelo de fraude, que requiere baja latencia. La arquitectura combina Real-Time Intelligence de J1 con MLflow de M3 y Data Activator. Todo dentro de Fabric. La latencia objetivo: 15-90 segundos end-to-end.
+Cambio de caso de uso: ahora hablamos del modelo de disponibilidad de e-bikes (Bicycles). La arquitectura combina Real-Time Intelligence de J1 con MLflow de M3 y Data Activator. Los datos se ingestan continuamente en streaming y se usan como histórico para reentrenar en offline, pero ejecutamos la inferencia en micro-batch (cada 5-15 min) consumiendo una API REST externa porque no es viable hacerlo en streaming directo/continuo de alta frecuencia.
 -->
 
 ---
 
-## Arquitectura · scoring streaming + Activator
+## Arquitectura · ingesta streaming + scoring micro-batch
 
 ```
-POS / app móvil ──► Eventstream ──► Eventhouse (KQL)
-                       │
-                       └─► Structured Streaming
-                              │  carga IsolationForest @champion
-                              ▼
-                       Delta `gold.fraude_scored`
-                              │
-                              └─► Activator ──► alerta Teams
+Estaciones IoT (e-bikes) ──► Eventstream ──► Eventhouse / Lakehouse (bicycles)
+                                                    │
+             ┌──────────────────────────────────────┘
+             │  (datos del stream para reentrenar)
+             ▼
+      Feature Pipeline (Gold)
+             │
+             ▼
+   MLflow Model Registry  ──► API REST (Web App)
+                                   ▲
+                                   │  (peticiones POST micro-batch)
+      Inferencia Micro-batch ──────┘  Notebook nb-09-inference
+             │
+             ▼
+    Delta `gold.predictions_ebikes_availability`
+             │
+             ▼
+    Data Activator ──► Alerta / Acción en Teams
 ```
 
-- **SynapseML IsolationForest** distribuido sobre Spark.
-- Mismo módulo de features que offline.
-- Activator = trigger **no-code** sobre `anomaly_score`.
+- Ingestión continua en **tiempo real** en OneLake (tabla `bicycles` de Bronce).
+- **Reentrenamiento**: Se extrae el dataset histórico originado del streaming para reentrenamiento offline.
+- **Scoring en Micro-batch** (cada 5–15 min): Invocación HTTP POST a la API REST de scoring para calificar la disponibilidad de bicicletas.
+- **Activator** = trigger **no-code** si la disponibilidad de bicis o anclajes libres es baja (`LOW_BIKES` / `LOW_DOCKS`).
 
 <!--
-Demo en vivo: ejecutar el notebook 06-fraude-stream e inyectar 3 transacciones anómalas con notebookutils. Mostrar la latencia en pantalla con un cronómetro. Si Activator no responde en < 90s pasa algo raro (probablemente el trigger está mal definido).
+Demo en vivo: ejecutar el notebook nb-09-inference-ebikes-availability para procesar eventos recientes de bicicletas de los últimos 15 min e invocar la API REST de scoring. Mostrar la latencia de las peticiones HTTP y cómo se insertan los resultados en gold.predictions_ebikes_availability, disparando la alerta de Activator si baja de cierto umbral.
 -->
 
 ---
 
-## Cuándo NO usar Fabric para scoring
+## Cuándo hacer scoring Micro-batch vs. Streaming
 
-| Necesidad | Latencia |
-|---|---|
-| Reportes diarios / semanales | Batch → **Fabric** |
-| Alertas operativas | < 1 min → **Fabric streaming + Activator** |
-| Decisión transaccional (bloquear pago) | < 100 ms → **Azure ML online endpoint** |
-| Inferencia en dispositivo (edge) | offline → **ONNX en el cliente** |
+| Patrón | Latencia / Cadencia | Caso de Uso |
+|---|---|---|
+| **Batch diario** | Diaria / Horaria | Forecast de demanda mayorista, reportes BI |
+| **Micro-batch** | Cada 5–15 min | **Disponibilidad de e-bikes**. Llamadas a APIs externas, evitar caídas de red, volumen controlado de eventos recientes |
+| **Streaming puro** | Segundos (NRT) | Telemetría IoT inmediata, detección de anomalías con Spark Structured Streaming |
+| **Baja Latencia Crítica** | < 100 ms | Decisión transaccional síncrona en tiempo real → **Azure ML / API Online** |
 
-> Fabric llega hasta ~10–30 s. Por debajo, integra con Azure ML.
+> **Lección:** Cuando la inferencia consume una API externa, el scoring **micro-batch** es el patrón ideal para evitar bloquear la ingesta.
 
 <!--
 Esto es la transición conceptual hacia M8. Si la sala pregunta 'pero entonces ¿cuándo Azure ML?' la respuesta corta es: cuando necesitas online serving < 100ms, GPU dedicada para entrenamiento o LLMs. Para todo lo demás, Fabric es suficiente y más simple.
@@ -552,6 +564,176 @@ La frase final es la que os tenéis que llevar. Decidir por carga de trabajo y p
 
 <!-- _class: section -->
 
+<span class="module">M9 · 30 min</span>
+
+# Del modelo al agente
+## Aurora Insight Agent con Foundry + Fabric
+
+<!--
+Este es el módulo que cierra el bucle. Hasta ahora hemos construido modelos, los hemos puesto en producción y monitorizado. Pero la pregunta del negocio es: ¿y quién consume estas predicciones? ¿Quién las interpreta? La respuesta es un agente de IA que traduce predicciones en decisiones. Y lo construimos con integración nativa: Fabric Data Agent como fuente de datos gobernada, Foundry Agent Service como orquestador con razonamiento.
+-->
+
+---
+
+## El gap: de predicción a decisión
+
+| Hoy (M1-M7) | Con agente (M9) |
+|---|---|
+| Tabla Gold → Power BI → humano interpreta | Tabla Gold → **Agente** → briefing + acciones |
+| Activator → alerta simple Teams | Agente → alerta **contextualizada** + causa raíz |
+| Drift → notebook manual | Agente → diagnóstico + **recomendación automática** |
+
+> El agente **no reemplaza** los modelos — los consume, interpreta y traduce a acción.
+
+<!--
+Preguntar a la sala: ¿cuántos de vuestros modelos en producción generan un output que alguien realmente lee y actúa? La mayoría de los modelos mueren en una tabla Gold que nadie mira. El agente es la última milla que faltaba.
+-->
+
+---
+
+## Arquitectura: dos capas integradas
+
+```
+┌─────────────────────────────────────────┐
+│  Azure AI Foundry Agent Service         │
+│  aurora-insight-agent (GPT-4.1-mini)    │
+│  ├─ FabricTool → Data Agent Fabric      │
+│  ├─ FunctionTool: analizar_drift()      │
+│  └─ FunctionTool: generar_recomendacion │
+└──────────────┬──────────────────────────┘
+               │ identity passthrough (OBO)
+┌──────────────▼──────────────────────────┐
+│  Microsoft Fabric                       │
+│  Data Agent: agt_aurora_insights        │
+│  ├─ gold.forecast_demanda               │
+│  ├─ gold.predictions_ebikes_availability │
+│  ├─ gold.metricas_drift                 │
+│  └─ Gobierno: RLS + Labels + Purview    │
+└─────────────────────────────────────────┘
+```
+
+<!--
+Dos capas, no una. El Fabric Data Agent da acceso gobernado a los datos (con RLS, sensitivity labels, todo lo que vimos en J2). El Foundry Agent añade la capa de razonamiento: interpreta, cruza datos, llama a funciones custom y genera el briefing. La integración es nativa vía FabricTool — no es un hack, es un conector oficial del SDK azure-ai-projects.
+-->
+
+---
+
+## Capa 1: Fabric Data Agent
+
+- **Mismo patrón de J2-M6**, pero sobre tablas de predicciones:
+  - `gold.forecast_demanda` · `gold.predictions_ebikes_availability` · `gold.metricas_drift`
+- Instrucciones ajustadas para **devolver datos estructurados** (JSON/tablas)
+- Few-shot examples orientados a métricas ML
+- Se **publica** → genera `workspace_id` + `artifact_id`
+
+> El Data Agent es el **punto de acceso gobernado** — RLS, labels y lineage aplican.
+
+<!--
+Nada nuevo conceptualmente respecto a J2. La novedad es que las fuentes ahora son tablas de predicciones ML, no tablas de ventas. Mismo gobierno, misma seguridad, mismo patrón.
+-->
+
+---
+
+## Capa 2: Foundry Agent con FabricTool
+
+```python
+from azure.ai.agents.models import FabricTool, FunctionTool
+
+# Fabric Data Agent como tool nativo
+conn_id = project_client.connections.get("aurora-fabric-connection").id
+fabric = FabricTool(connection_id=conn_id)
+
+# Funciones custom para lógica que SQL no cubre
+functions = FunctionTool(functions={
+    analizar_drift,
+    generar_recomendacion
+})
+
+agent = agents_client.create_agent(
+    model="gpt-4.1-mini",
+    name="aurora-insight-agent",
+    instructions=SYSTEM_PROMPT,
+    tools=fabric.definitions + functions.definitions,
+)
+```
+
+<!--
+El código real. Tres líneas para conectar Fabric como tool, tres más para las funciones custom, y create_agent combina ambos. El modelo gpt-4.1-mini es suficiente para orquestar — no necesitamos GPT-4o completo porque el razonamiento pesado lo hacen las funciones. Coste optimizado.
+-->
+
+---
+
+## Function calling: lógica que un SQL no puede hacer
+
+| Función | Qué hace | Por qué no es SQL |
+|---|---|---|
+| `analizar_drift()` | Tendencia PSI, features afectadas, recomendación | Requiere análisis temporal + umbral + lógica condicional |
+| `generar_recomendacion()` | Prioriza acciones según reglas de negocio | Combina múltiples señales (demanda + disponibilidad + drift) |
+
+> El LLM decide **cuándo** llamar cada función basándose en la pregunta del usuario.
+
+<!--
+Esto es lo que diferencia un Data Agent de un verdadero agente inteligente. El Data Agent responde 'cuánto'. Las functions responden 'qué hacer al respecto'. Y el LLM orquesta cuándo usar cada cosa. Function calling es el patrón clave — no es el LLM generando SQL, es el LLM decidiendo qué herramienta usar.
+-->
+
+---
+
+## Ejemplo: briefing operacional
+
+> *"Dame el briefing de hoy."*
+
+🟡 **Demanda** · Madrid-Sur con 18% error (media 6%). Pico previsto mañana 19h: +22%.
+
+🔴 **Disponibilidad** · Alerta crítica en estación "Estrella". Disponibilidad < 5% estimada en próximas 2 horas.
+
+🔴 **Drift** · Modelo demanda: PSI=0.31 en feature `temperatura`. 3 días sobre umbral.
+
+**Recomendaciones:**
+1. ⚡ Activar cargadores auxiliares Madrid-Sur
+2. 🚲 Enviar camión de balanceo / reposición a estación "Estrella"
+3. 🔄 Reentrenar modelo demanda con datos recientes
+
+<!--
+Esto es lo que recibe el director de operaciones a las 7 de la mañana en Teams. Sin abrir Power BI, sin entrar en Fabric, sin mirar notebooks. Un briefing accionable que cruza los tres modelos. Pregunta a la sala: ¿cuánto vale esto vs un dashboard que nadie mira?
+-->
+
+---
+
+## Publicación: dónde vive el agente
+
+| Canal | Cómo |
+|---|---|
+| **API REST** | Endpoint nativo de Foundry → integrable con cualquier sistema |
+| **Teams** | Foundry → Publish → Teams app → fijar en canal |
+| **Briefing automático** | Logic App (07:00) → POST al agente → Adaptive Card a Teams |
+| **Power BI** | Web embed en informe para preguntas ad-hoc |
+
+> **Gobierno**: identity passthrough, RLS heredado, trazas en App Insights.
+
+<!--
+La publicación en Teams es la que más impacto tiene para usuarios de negocio. Pero la API es la que permite automatización. La combinación Logic App + agente + Teams es el patrón más potente: briefing diario automático a las 7 de la mañana sin que nadie lo pida.
+-->
+
+---
+
+## Mensaje clave M9
+
+> Un modelo en producción sin agente es como un informe que nadie lee.
+>
+> **La IA generativa cierra el bucle entre predicción y decisión.**
+
+- Fabric Data Agent = acceso **gobernado** a datos
+- Foundry Agent = **razonamiento** + tools + publicación
+- Juntos, no separados.
+
+<!--
+Este es el cierre conceptual de la jornada. Hemos ido de datos crudos a modelos, de modelos a predicciones, de predicciones a un agente que genera decisiones. El ciclo completo en una plataforma integrada.
+-->
+
+---
+
+<!-- _class: section -->
+
 # Cierre
 ## Próximos pasos y deberes
 
@@ -563,9 +745,10 @@ La frase final es la que os tenéis que llevar. Decidir por carga de trabajo y p
 - **OneLake + Delta = feature store básico** sin coste adicional.
 - **MLflow es ciudadano de primera clase**: Experiment + ML Model como items.
 - **`PREDICT`** elimina el "deployar endpoint" para casos batch / SQL.
-- Real-Time + SynapseML + Activator = **scoring en < 1 min sin DevOps**.
+- Ingesta streaming + scoring micro-batch + Activator = **alertas automatizadas sin DevOps**.
 - Gobierno (**Purview**) y conversacional (**Data Agents**) cierran el círculo.
 - Reentrenar **a evidencia**, propagar con **Deployment Pipelines**.
+- **IA generativa cierra el bucle**: Foundry Agent + Fabric Data Agent = de predicción a decisión.
 
 ---
 
@@ -577,11 +760,12 @@ La frase final es la que os tenéis que llevar. Decidir por carga de trabajo y p
 | EJ3-02 | Features de demanda | 45 min |
 | EJ3-03 | Training MLflow | 60 min |
 | EJ3-04 | Pipeline scoring + Power BI | 45 min |
-| EJ3-05 | Fraude tiempo real | 60 min |
+| EJ3-05 | Ingesta streaming y scoring micro-batch | 60 min |
 | EJ3-06 | Deployment Pipeline | 45 min |
 | EJ3-07 *(opcional)* | Drift monitor | 60 min |
+| EJ3-08 | Aurora Insight Agent (Foundry + Fabric) | 60 min |
 
-> Total: ~5 h. Disponible en `ejercicios/jornada-3/`.
+> Total: ~6 h. Disponible en `ejercicios/jornada-3/`.
 
 <!--
 Avisar: el EJ3-07 es opcional pero el que más diferencia. Si solo van a hacer uno extra, que sea ese — porque integra todo lo aprendido. Recordar el canal de soporte asíncrono para dudas.

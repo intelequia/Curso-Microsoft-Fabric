@@ -5,84 +5,84 @@
 ## Objetivos
 
 1. Combinar **Eventstream**, **Eventhouse** y un modelo de ML para hacer scoring de baja latencia.
-2. Usar **SynapseML** (`IsolationForest`) para entrenar un detector de anomalías sobre transacciones.
-3. Disparar alertas con **Activator (Data Activator)** sin código.
-4. Entender el límite entre *near real-time* (segundos/minutos) en Fabric y *online serving* (milisegundos) en Azure ML.
+2. Entrenar el modeo de predicción sacando los datos del eventsteam.
+3. Desplegar el modelo para hacer inferencia online en microbatch.
+4. Mostrar cómo Fabric permite pasar de datos en streaming a acciones operativas casi en tiempo real.
 
 ## Hilo narrativo
 
-> "El equipo antifraude de Aurora Energía no puede esperar al batch nocturno: cuando una tarjeta se usa de forma sospechosa, quieren saberlo en **menos de 1 minuto**. Lo conseguimos sin salir de Fabric, combinando Real-Time Intelligence con un modelo desplegado como UDF Spark."
+> "El equipo de operaciones de la flota de bicicletas quiere anticiparse al estado de las bicis casi en tiempo real, sin esperar a procesos batch. A partir de la telemetría que entra por Eventstream, entrenamos un modelo con histórico, lo desplegamos dentro de Fabric y generamos predicciones en microbatch en menos de un minuto."
 
 ## Contenido
 
 ### 1. Arquitectura objetivo
 
 ```
-POS / app móvil
-   │  (evento JSON)
+Bicicletas / sensores IoT
+   │  (evento JSON de telemetría)
    ▼
 Eventstream  ──►  Eventhouse (KQL DB)   [retención corta, hot data]
    │
    ├─► Stream → Notebook Spark Structured Streaming
-   │            │  carga modelo IsolationForest (MLflow @champion)
-   │            │  score cada microbatch
+   │            │  llama a la api del  modelo MLflow @champion
+   │            │  predice cada microbatch
    │            ▼
-   │       Tabla Delta `gold.fraude_scored`
+   │       Tabla Delta `gold.bikes_predictions`
    │
-   └─► Activator → alerta a Teams si score > umbral
+   └─► Activator → alerta a Teams si la predicción supera un umbral
 ```
 
 ### 2. Entrenamiento del detector (offline)
 
-- Modelo: **IsolationForest** de SynapseML, distribuido sobre Spark.
-- Features: las construidas en M2 (`features_cliente_fraude`).
-- Entrenado contra histórico de 6 meses, registrado como `mdl_aurora_fraude_iforest`.
+- Modelo: **RandomForest** usando la api de spark.
+- Features: las construidas en M2 (`features_ebikes_availability`).
+- Entrenado contra histórico de 6 meses, registrado como `mdl_auroroa_ebikes_availability`.
 
 ```python
-from synapse.ml.isolationforest import IsolationForest
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
 
-iforest = (IsolationForest()
-    .setNumEstimators(200)
-    .setContamination(0.01)
-    .setFeaturesCol("features"))
+classifier = RandomForestClassifier(
+    n_estimators=200,
+    max_depth=12,
+    min_samples_leaf=2,
+    class_weight="balanced",
+    random_state=42,
+    n_jobs=-1,
+)
 
-model = iforest.fit(df_train)
-mlflow.spark.log_model(model, "model",
-    registered_model_name="mdl_aurora_fraude_iforest")
-```
+model_pipeline = Pipeline(steps=[("preprocessor", preprocessor), ("classifier", classifier)])
 
 ### 3. Scoring streaming
 
 ```python
-from pyspark.sql.functions import col
+pdf_events = df_microbatch.toPandas()
 
-scorer = mlflow.pyfunc.spark_udf(
-    spark, "models:/mdl_aurora_fraude_iforest@champion")
+responses = []
+headers = {"Content-Type": "application/json"}
+payload = {
+	"BikepointID": str(row.get("BikepointID", row.get("bikepoint_id", ""))),
+	"Street": str(row.get("Street", row.get("street", ""))),
+	"Neighbourhood": str(row.get("Neighbourhood", row.get("neighbourhood", ""))),
+	"Latitude": float(row.get("Latitude", row.get("latitude", 0.0))),
+	"Longitude": float(row.get("Longitude", row.get("longitude", 0.0)))
+}
 
-stream = (spark.readStream
-    .format("eventhubs")            # o conector Eventstream
-    .options(**eh_opts).load()
-    .select(parse_event("body").alias("e"))
-    .select("e.*")
-    .transform(build_features_realtime)      # MISMO código que offline
-    .withColumn("anomaly_score", scorer(struct(*feature_cols)))
-)
+event_timestamp = str(row.get(ts_col, datetime.now(timezone.utc).isoformat()))
 
-(stream.writeStream
-    .format("delta")
-    .option("checkpointLocation", "Files/_chk/fraude")
-    .outputMode("append")
-    .toTable("gold.fraude_scored"))
+resp = requests.post(scoring_api_url, json=payload, headers=headers, timeout=10)
+
 ```
 
 ### 4. Activator (Data Activator)
 
-- Objeto **Reflex** que escucha la tabla `gold.fraude_scored` (o directamente el Eventstream con score).
-- Definimos:
-  - **Object**: transacción.
-  - **Property**: `anomaly_score`.
-  - **Trigger**: `score > 0.7` durante al menos 1 evento.
-  - **Action**: enviar tarjeta adaptativa a un canal de Teams del equipo antifraude.
+Ejemplo de trigger
+- si risk_score > 0.8
+- si prediction = 1
+
+Acción
+alerta a Teams al equipo de operaciones
+opcionalmente, abrir tarea de reequilibrado o revisión
 
 > Activator es **no-code** — la persona de negocio puede ajustar el umbral sin tocar el notebook.
 
@@ -107,8 +107,8 @@ stream = (spark.readStream
 ## Demo en vivo (8 min)
 
 1. Mostrar el Eventstream `es_aurora_transacciones` y su salida hacia el Eventhouse.
-2. Ejecutar el notebook `05-fraude-synapseml` en modo streaming.
-3. Inyectar 3 transacciones sintéticas anómalas con `notebookutils`.
+2. Ver el pipeline de entrenamiento con el registro de los modelos, desplegar la ultima versión para hacer inferencia online.
+3. Ejecutar el notebook `09-inference-ebikes-availability` en modo microbatch.
 4. Ver el `anomaly_score` aparecer en `gold.fraude_scored` y la alerta en el canal de Teams.
 
 ## Mensajes clave
