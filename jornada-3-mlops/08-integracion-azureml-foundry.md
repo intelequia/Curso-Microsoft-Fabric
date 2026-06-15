@@ -94,3 +94,5 @@ Integración con Fabric:
 - "Fabric no compite con Azure ML/Foundry — **se complementan**."
 - "El **dato vive en OneLake**. El cómputo va donde haga falta."
 - "Decide por **carga de trabajo y equipo operativo**, no por moda."
+
+> **Siguiente módulo (M9):** ponemos en práctica la integración con Foundry construyendo el *Aurora Insight Agent* — un agente que consume las predicciones de los modelos ML y genera briefings operacionales publicados en Teams. Ver [09-agente-ia-foundry-fabric.md](09-agente-ia-foundry-fabric.md).

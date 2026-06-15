@@ -66,13 +66,12 @@ Tres ideas que se repiten:
 - Genera celdas a partir de prompts: *"crea features de calendario"*, *"entrena un LightGBM y registra el experimento en MLflow"*.
 - Útil pedagógicamente para enseñar buenas prácticas; **siempre revisar** el código antes de ejecutarlo.
 
-### 7. Los tres casos de Aurora Energía que articulan la jornada
+### 7. Los dos casos de Aurora Energía que articulan la jornada
 
 | Caso | Tipo | Datos de partida |
 | --- | --- | --- |
 | **Forecast demanda eléctrica horaria** por estación | Regresión / series temporales | `fact_ventas` + `clima_historico` |
-| **Detección de fraude** en tarjetas de fidelización | Clasificación + anomalías | `transacciones_fidelizacion` + `dim_cliente` |
-| **Segmentación B2B logística** | Clustering | `dim_cliente` filtrado a segmento B2B + agregados de `fact_ventas` |
+| **Predicción de demanda de bicicletas** Caso tiempo real | Forecast/real tiem | `transacciones_fidelizacion` + `dim_cliente` |
 
 ## Demo en vivo (6 min)
 

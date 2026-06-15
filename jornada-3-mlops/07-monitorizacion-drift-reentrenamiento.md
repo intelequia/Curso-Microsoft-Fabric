@@ -4,14 +4,16 @@
 
 ## Objetivos
 
-1. Distinguir **data drift**, **concept drift** y **degradación de servicio**.
-2. Implementar métricas de drift en notebooks Fabric con **PSI** y **KS test**.
-3. Visualizar la salud del modelo en un dashboard Power BI dedicado.
-4. Disparar **reentrenamiento automático** vía Pipeline + Deployment Pipelines (Dev → Test → Prod).
+1 - Distinguir data drift, concept drift y degradación de servicio.
+2 - Registrar y versionar el dataset de entrenamiento en el Lakehouse, guardándolo en Files.
+3 - Implementar métricas de drift en notebooks Fabric con PSI y KS test.
+4 - Persistir la monitorización del modelo en el Lakehouse Gold: drift, degradación, predicciones y comparativas contra el target real.
+5 - Registrar el control operativo en el Warehouse Gold: ejecuciones de pipelines, estado, errores, métricas relevantes y trazabilidad.
+6 - Visualizar la salud del modelo en un dashboard Power BI dedicado.
 
 ## Hilo narrativo
 
-> "El día que el modelo entra en producción, el reloj empieza a correr. El mundo cambia, los datos cambian, la verdad cambia. Sin monitorización, **un modelo en producción es deuda técnica con apariencia de innovación**."
+> "El día que el modelo entra en producción, el reloj empieza a correr. El mundo cambia, los datos cambian, la verdad cambia. Sin monitorización, un modelo en producción es deuda técnica con apariencia de innovación."
 
 ## Contenido
 
@@ -23,8 +25,32 @@
 | **Concept drift** | Relación X → y (el target ya no se comporta igual) | Caída de MAPE / AUC sobre etiquetas frescas |
 | **Service drift** | Latencia, errores, valores fuera de rango | Logs del pipeline y de la API |
 
-### 2. PSI sobre features (notebook programado)
+### 2. Registro y versionado del dataset de entrenamiento
+Antes de entrenar un modelo, el dataset usado debe quedar congelado y trazable.
+El objetivo es poder responder siempre a:
 
+- Qué datos se usaron para entrenar el modelo.
+- Qué versión del dataset corresponde a cada versión del modelo.
+- Qué ventana temporal cubría el entrenamiento.
+- Qué features y target contenía.
+- Qué pipeline/notebook generó ese dataset.
+- Dónde está almacenado físicamente.
+
+El dataset de entrenamiento se guarda en el Lakehouse, dentro de Files, versionado por fecha, modelo y ejecución.
+
+Files/
+└── ml/
+    └── training_datasets/
+        └── forecast_demanda/
+            └── version=2026-06-15_0743/
+                ├── train.parquet
+                ├── validation.parquet
+                ├── test.parquet
+                └── metadata.json
+
+### 3. PSI sobre features (notebook programado)
+El drift se calcula comparando la distribución de producción contra la distribución del dataset de entrenamiento registrado.
+La referencia no debe ser “la tabla actual”, sino la versión exacta del dataset con la que se entrenó el modelo en producción.
 ```python
 import numpy as np
 
@@ -44,7 +70,7 @@ Convención de interpretación:
 - `0.1 ≤ PSI < 0.25` → drift moderado, vigilar.
 - `PSI ≥ 0.25` → drift significativo, reentrenar.
 
-### 3. Métrica de negocio: MAPE rolling
+### 4. Métrica de negocio: MAPE rolling
 
 - Sobre `gold.forecast_demanda` y `gold.demanda_real` (cuando llega el real) calculamos MAPE diario, semanal y mensual.
 - Visualizado en un reporte Power BI **`Salud del modelo Aurora`** con:
@@ -52,28 +78,70 @@ Convención de interpretación:
   - PSI por feature top-10 (heatmap).
   - % de predicciones generadas por cada versión del modelo (`champion` vs. `challenger`).
 
-### 4. Trigger de reentrenamiento
+### 5. Qué cae en Lakehouse Gold
 
-Pipeline `pl_reentrenamiento_forecast`:
+El Lakehouse Gold es la capa principal para guardar datos analíticos detallados relacionados con el modelo.
+Aquí deben caer:
 
-1. **Notebook** de monitorización: calcula PSI y MAPE, escribe a tabla `gold.model_health`.
-2. **If activity**: si `PSI > 0.25` **o** `MAPE_7d > umbral`, continúa; si no, termina.
-3. **Notebook** de feature engineering (M2) con ventana extendida.
-4. **Notebook** de training (M3) que registra el modelo como nueva versión con alias `challenger`.
-5. **Notebook** de evaluación A/B: scorer ambos contra los últimos 7 días con `y` real y compara.
-6. **If activity**: si challenger gana, llamar al **Deployment Pipeline** para promover a `champion`.
-7. **Teams notification** con el veredicto.
+- **Datasets de entrenamiento versionados** en Files.
+- **Tablas Delta** con predicciones batch.
+- **Resultados detallados** de drift.
+- **Métricas de degradación** por periodo.
+- **Comparativas** entre predicción y valor real.
+- **Evidencias** para reentrenamiento.
+- **Información técnica** que pueda ser reutilizada por notebooks, MLflow o análisis posteriores.
 
-> Programación: ejecución semanal + ejecución *ad-hoc* desde Activator si el MAPE diario supera 2× el del histórico.
+Estructura recomendada:
 
-### 5. Deployment Pipelines entre workspaces
+```text
+Lakehouse Gold
+├── Files/
+│   └── ml/
+│       └── training_datasets/
+│           └── forecast_demanda/
+│               └── version=YYYY-MM-DD_HHMM/
+│                   ├── train.parquet
+│                   ├── validation.parquet
+│                   ├── test.parquet
+│                   └── metadata.json
+│
+└── Tables/
+    ├── gold.forecast_demanda
+    ├── gold.demanda_real
+    ├── gold.model_drift_feature
+    ├── gold.model_health
+    ├── gold.model_prediction_quality
+    └── gold.ml_training_dataset_registry
+```
 
-- Tres workspaces: `aurora-ml-dev`, `aurora-ml-test`, `aurora-ml-prod`.
-- Un **Deployment Pipeline** propaga: notebooks, environments, modelos, pipelines.
-- Reglas de **parámetros por entorno**: connection strings, nombres de tablas, alias de modelo.
-- **Aprobación** obligatoria al promover a `prod` (M6).
+### 6. Qué cae en Warehouse Gold
 
-### 6. Anti-patrones
+El Warehouse Gold se usa como capa estructurada para control, auditoría, gobierno y reporting operativo.
+Aquí deben caer los registros más consumibles por negocio, Power BI, seguimiento de SLAs y control de ejecuciones.
+Debe incluir:
+
+- **Ejecuciones** de pipelines.
+- **Estado** de notebooks.
+- **Duración** de actividades.
+- **Errores y mensajes** relevantes.
+- **Métricas resumidas** de modelos.
+- **Estado final** de cada ciclo de scoring, monitorización o reentrenamiento.
+- **Versiones de modelo** usadas.
+- **Decisiones tomadas**: mantener champion, promover challenger, lanzar reentrenamiento, etc.
+
+Estructura de tablas:
+
+```text
+Warehouse Gold
+├── gold.ml.pipeline_execution_log
+├── gold.ml.pipeline_activity_log
+├── gold.ml.model_execution_summary
+├── gold.ml.model_metric_summary
+├── gold.ml.model_retraining_decision
+└── gold.ml.model_registry_summary
+```
+
+### 7. Anti-patrones
 
 - ❌ Reentrenar cada noche "por si acaso" (consumo de capacidad sin retorno).
 - ❌ Reemplazar el champion automáticamente sin shadow.
