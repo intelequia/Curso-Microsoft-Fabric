@@ -50,11 +50,11 @@ Al finalizar el curso, el alumno será capaz de:
 
 ### Jornada 3 — MLOps en Microsoft Fabric *(opcional, 4 h)*
 
-Deep dive sobre las capacidades de Machine Learning de Fabric, articulado alrededor de **tres casos** ficticios de Aurora Energía: **forecast de demanda eléctrica** (regresión), **detección de fraude** en tarjetas de fidelización (anomalías en tiempo real) y **segmentación B2B** (clustering). Se recorre el ciclo MLOps completo: feature engineering → MLflow → scoring batch y streaming → gobierno → drift → reentrenamiento.
+Deep dive sobre las capacidades de Machine Learning de Fabric, articulado alrededor de **dos casos** ficticios de Aurora Energía: **predicción de combustible** y **predicción de demanda de e-bikes en tiempo real** usando Eventstream, Eventhouse y Activator. Se recorre el ciclo MLOps completo: feature engineering → MLflow → scoring batch y streaming → gobierno → drift → reentrenamiento.
 
 | Bloque | Duración | Tema |
 | --- | --- | --- |
-| J3-M0 | 15 min | Recapitulación J1+J2 y presentación de los 3 casos |
+| J3-M0 | 15 min | Recapitulación J1+J2 y presentación de los 2 casos |
 | J3-M1 | 25 min | [Fundamentos de Data Science en Fabric](jornada-3-mlops/01-fundamentos-ds-fabric.md) |
 | J3-M2 | 35 min | [Feature engineering a escala sobre OneLake](jornada-3-mlops/02-feature-engineering.md) |
 | J3-M3 | 40 min | [Experimentación y registro con MLflow](jornada-3-mlops/03-experiments-mlflow.md) |
