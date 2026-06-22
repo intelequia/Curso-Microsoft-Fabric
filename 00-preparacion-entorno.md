@@ -1,67 +1,114 @@
-# Preparación del entorno: Trial de Microsoft Fabric
+# Preparación del entorno
 
-Sigue estos pasos **antes de la primera jornada**. Reserva 15–20 minutos. Si no consigues completarlo, contacta con el formador.
+Reserva entre 30 y 45 minutos antes de la primera jornada.
 
-## Opción A — Activar la trial de Fabric en tu tenant corporativo
+## 1. Crear el grupo de recursos
 
-Esta es la opción preferida si tu tenant lo permite.
+1. Entra en [Azure Portal](https://portal.azure.com).
+2. Crea un resource group:
+   - Nombre: `rg-ia-ml-azure-aurora`
+   - Región sugerida: una región donde tengas cuota para modelos Foundry, Azure OpenAI y Azure Machine Learning.
+3. Verifica que tu usuario tiene rol **Contributor** sobre el grupo.
 
-1. Abre [https://app.fabric.microsoft.com](https://app.fabric.microsoft.com) e inicia sesión con tu cuenta de Entra ID corporativa.
-2. En la esquina superior derecha pulsa el icono de **perfil** → **Iniciar prueba gratuita**.
-3. Acepta los términos. Verás aparecer un badge **"Prueba"** en la barra superior con los días restantes (60 días por defecto).
-4. Una vez activada, en la esquina inferior izquierda cambia el experience switcher al área que toque (Power BI, Data Engineering, Data Warehouse, Real-Time Intelligence, etc.). Todas usarán la misma capacidad de prueba (FT1 / Trial).
+## 2. Entrar en Microsoft Foundry
 
-> **Si tu tenant tiene la opción deshabilitada** (ves un mensaje de "Tu administrador no permite las pruebas") salta a la **Opción B**.
+1. Abre [https://ai.azure.com](https://ai.azure.com).
+2. Activa la experiencia nueva de Foundry si aparece el conmutador **New Foundry**.
+3. Crea o selecciona un recurso/proyecto:
+   - Recurso: `foundry-aurora`
+   - Proyecto: `foundry-aurora-curso`
+4. Anota el endpoint del proyecto, con forma:
 
-## Opción B — Crear un tenant de Microsoft 365 Developer + activar Fabric
+```text
+https://<resource-name>.services.ai.azure.com/api/projects/<project-name>
+```
 
-1. Regístrate en el **Microsoft 365 Developer Program** en [https://developer.microsoft.com/microsoft-365/dev-program](https://developer.microsoft.com/microsoft-365/dev-program). Necesitas una cuenta Microsoft personal para el alta, pero el tenant que se crea es independiente (`tu-alias.onmicrosoft.com`).
-2. Crea el tenant de pruebas (instant sandbox o configurable). Te darán 25 licencias E5.
-3. Inicia sesión en `https://admin.microsoft.com` y crea (o reutiliza) un usuario administrador.
-4. Con esa cuenta, ve a [https://app.fabric.microsoft.com](https://app.fabric.microsoft.com) y sigue los pasos 2–4 de la Opción A.
+## 3. Desplegar un modelo
 
-## Opción C — Capacidad Fabric en Azure (solo si quieres ir más allá)
+1. En Foundry, abre el catálogo de modelos.
+2. Selecciona un modelo disponible en tu región.
+3. Despliégalo con un nombre simple, por ejemplo:
+   - `gpt-4.1-mini`
+   - `gpt-5.1-mini`, si está disponible en tu tenant y región
+4. Guarda el nombre exacto del despliegue: se usará en los ejercicios.
 
-Si tu organización ya tiene una suscripción Azure y quieres ver una capacidad real:
+## 4. Preparar Azure AI Search
 
-1. Entra en [https://portal.azure.com](https://portal.azure.com).
-2. Crea un recurso **Microsoft Fabric** (busca "Microsoft Fabric" en el marketplace).
-3. Selecciona **F2** o **F4** para laboratorio (coste muy bajo si la pausas tras el curso).
-4. Asigna la capacidad a un workspace creado en Fabric desde **Configuración del workspace → Premium → Fabric capacity**.
+1. Crea un servicio Azure AI Search en el mismo grupo de recursos:
+   - Nombre: `srch-aurora-foundry-<iniciales>`
+   - Tier: Free o Basic para laboratorio.
+2. En Foundry, crea una conexión al servicio de búsqueda.
+3. Usaremos este servicio para knowledge bases y grounding.
 
-> **Importante**: Acuérdate de **pausar la capacidad** cuando no la uses (`Pause` en Azure Portal). Solo se factura el tiempo en el que está activa.
+## 5. Preparar observabilidad
 
-## Verificación
+1. Crea un recurso Application Insights:
+   - Nombre: `appi-aurora-foundry`
+2. Enlázalo al proyecto Foundry si la opción está disponible.
+3. Si el portal no permite enlazarlo aún, se mostrará en demo y se usará como referencia arquitectónica.
 
-Cuando la trial esté activa deberías poder:
+## 6. Preparar local
 
-- Crear un nuevo **Workspace** (`+ Nuevo workspace`) y verlo en la lista.
-- Dentro del workspace, pulsar **+ Nuevo elemento** y ver disponibles, al menos: Lakehouse, Warehouse, Notebook, Data pipeline, Eventhouse, Semantic model.
-- Crear un Lakehouse vacío llamado `lh_aurora` y verlo aparecer.
+```bash
+az login
+python --version
+pip install azure-identity azure-ai-projects openai pandas
+pip install azure-ai-ml mlflow scikit-learn matplotlib
+```
 
-Si las tres comprobaciones pasan, estás listo. Borra el Lakehouse de prueba si quieres, lo reharemos juntos en la primera práctica.
+Crea variables de entorno para los ejemplos:
 
-## Convención de nombres del curso
+```bash
+export FOUNDRY_PROJECT_ENDPOINT="https://<resource>.services.ai.azure.com/api/projects/<project>"
+export FOUNDRY_MODEL_DEPLOYMENT="<deployment-name>"
+export AZURE_ML_WORKSPACE="<workspace-name>"
+export AZURE_ML_RESOURCE_GROUP="rg-ia-ml-azure-aurora"
+```
 
-Para que todas las capturas y ejercicios encajen, usa estos nombres en tu workspace personal:
+En Windows PowerShell:
 
-| Artefacto | Nombre |
-| --- | --- |
-| Workspace principal | `aurora-curso-fabric` |
-| Workspace test (Jornada 1, ejercicio para casa de Deployment Pipeline) | `aurora-curso-fabric-test` |
-| Workspace prod | `aurora-curso-fabric-prod` |
-| Lakehouse | `lh_aurora` |
-| Warehouse | `wh_aurora` |
-| Notebook principal | `nb_aurora_lab` |
-| Pipeline | `pl_aurora_ingesta` |
-| Eventhouse | `eh_aurora_telemetria` |
-| Semantic model | `sm_aurora_ventas` |
+```powershell
+$env:FOUNDRY_PROJECT_ENDPOINT="https://<resource>.services.ai.azure.com/api/projects/<project>"
+$env:FOUNDRY_MODEL_DEPLOYMENT="<deployment-name>"
+$env:AZURE_ML_WORKSPACE="<workspace-name>"
+$env:AZURE_ML_RESOURCE_GROUP="rg-ia-ml-azure-aurora"
+```
+
+## 7. Preparar Azure Machine Learning Studio
+
+1. Abre [https://ml.azure.com](https://ml.azure.com).
+2. Crea o selecciona un workspace:
+   - Workspace: `mlw-aurora-curso`
+   - Storage account: creado automáticamente o reutilizado del grupo.
+   - Key Vault y Application Insights: creados automáticamente para laboratorio.
+3. Crea una compute instance pequeña para notebooks:
+   - Nombre: `ci-aurora-<iniciales>`
+   - Tamaño sugerido: CPU económico disponible en tu región.
+4. Crea un compute cluster con escalado a cero:
+   - Nombre: `cpu-cluster`
+   - Min nodes: `0`
+   - Max nodes: `2`
+5. Comprueba que puedes abrir Notebooks y ver Jobs, Models y Endpoints.
+
+## 8. Verificación
+
+Antes del curso deberías poder:
+
+- Entrar en el proyecto Foundry.
+- Entrar en Azure Machine Learning Studio.
+- Ver al menos un modelo desplegado.
+- Ver el workspace `mlw-aurora-curso`.
+- Arrancar o seleccionar una compute instance.
+- Abrir el playground y enviar una pregunta.
+- Ejecutar `az account show`.
+- Abrir los documentos de `assets/docs`.
 
 ## Problemas habituales
 
 | Síntoma | Causa probable | Solución |
 | --- | --- | --- |
-| No veo la opción "Iniciar prueba gratuita" | El admin del tenant la ha desactivado | Pide al admin que active "Trial users can start trials" en el centro de administración o usa la Opción B. |
-| Aparece un error de licencia al crear un Lakehouse | No has asignado capacidad al workspace | Edita el workspace → asigna capacidad **Trial / Fabric capacity**. |
-| No veo el Eventhouse en `+ Nuevo` | Estás en un workspace sin capacidad Fabric (solo Power BI Pro) | Reasigna el workspace a la capacidad Trial. |
-| OneLake File Explorer no abre | Necesitas Windows + cuenta válida en Fabric | Usa la web mientras tanto, o instala desde [aquí](https://www.microsoft.com/en-us/download/details.aspx?id=105222). |
+| No puedo crear modelos | Falta cuota o región no compatible | Cambia de región o solicita cuota. |
+| El endpoint no funciona | Estás usando el endpoint de recurso equivocado | Usa el endpoint del proyecto para Foundry SDK y Agent Service. |
+| Error 401 local | `az login` usa otro tenant | Ejecuta `az login --tenant <tenant-id>`. |
+| No aparece una herramienta | Preview no habilitada o región no compatible | Usa la alternativa indicada por el formador. |
+| La compute de Azure ML no arranca | Cuota insuficiente o tamaño no disponible | Cambia el tamaño de VM o solicita cuota. |

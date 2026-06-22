@@ -1,20 +1,24 @@
 {
-  "name": "curso-fabric-slides",
+  "name": "ia-ml-azure-slides",
   "version": "1.0.0",
   "private": true,
-  "description": "Slides Marp para el curso Microsoft Fabric (Jornada 1 + Jornada 2).",
+  "description": "Slides Marp para el curso IA y ML en Azure.",
   "scripts": {
-    "j1:html":  "marp jornada-1-fabric.md            --theme themes/intelequia.css --html --allow-local-files -o dist/jornada-1-fabric.html",
-    "j1:pdf":   "marp jornada-1-fabric.md            --theme themes/intelequia.css --pdf  --allow-local-files -o dist/jornada-1-fabric.pdf",
-    "j1:pptx":  "marp jornada-1-fabric.md            --theme themes/intelequia.css --pptx --allow-local-files -o dist/jornada-1-fabric.pptx",
-    "j2:html":  "marp jornada-2-purview-fabriciq.md  --theme themes/intelequia.css --html --allow-local-files -o dist/jornada-2-purview-fabriciq.html",
-    "j2:pdf":   "marp jornada-2-purview-fabriciq.md  --theme themes/intelequia.css --pdf  --allow-local-files -o dist/jornada-2-purview-fabriciq.pdf",
-    "j2:pptx":  "marp jornada-2-purview-fabriciq.md  --theme themes/intelequia.css --pptx --allow-local-files -o dist/jornada-2-purview-fabriciq.pptx",
-    "all:html": "npm run j1:html && npm run j2:html",
-    "all:pdf":  "npm run j1:pdf  && npm run j2:pdf",
-    "all:pptx": "npm run j1:pptx && npm run j2:pptx",
-    "watch:j1": "marp jornada-1-fabric.md           --theme themes/intelequia.css --html --watch --server",
-    "watch:j2": "marp jornada-2-purview-fabriciq.md --theme themes/intelequia.css --html --watch --server"
+    "j1:html": "marp jornada-1-foundry.md --theme themes/intelequia.css --html --allow-local-files -o dist/jornada-1-foundry.html",
+    "j1:pdf": "marp jornada-1-foundry.md --theme themes/intelequia.css --pdf --allow-local-files -o dist/jornada-1-foundry.pdf",
+    "j1:pptx": "marp jornada-1-foundry.md --theme themes/intelequia.css --pptx --allow-local-files -o dist/jornada-1-foundry.pptx",
+    "j2:html": "marp jornada-2-foundry-agents-governance.md --theme themes/intelequia.css --html --allow-local-files -o dist/jornada-2-foundry-agents-governance.html",
+    "j2:pdf": "marp jornada-2-foundry-agents-governance.md --theme themes/intelequia.css --pdf --allow-local-files -o dist/jornada-2-foundry-agents-governance.pdf",
+    "j2:pptx": "marp jornada-2-foundry-agents-governance.md --theme themes/intelequia.css --pptx --allow-local-files -o dist/jornada-2-foundry-agents-governance.pptx",
+    "aml:html": "marp jornada-azure-ml-studio.md --theme themes/intelequia.css --html --allow-local-files -o dist/jornada-azure-ml-studio.html",
+    "aml:pdf": "marp jornada-azure-ml-studio.md --theme themes/intelequia.css --pdf --allow-local-files -o dist/jornada-azure-ml-studio.pdf",
+    "aml:pptx": "marp jornada-azure-ml-studio.md --theme themes/intelequia.css --pptx --allow-local-files -o dist/jornada-azure-ml-studio.pptx",
+    "all:html": "npm run j1:html && npm run j2:html && npm run aml:html",
+    "all:pdf": "npm run j1:pdf && npm run j2:pdf && npm run aml:pdf",
+    "all:pptx": "npm run j1:pptx && npm run j2:pptx && npm run aml:pptx",
+    "watch:j1": "marp jornada-1-foundry.md --theme themes/intelequia.css --html --watch --server",
+    "watch:j2": "marp jornada-2-foundry-agents-governance.md --theme themes/intelequia.css --html --watch --server",
+    "watch:aml": "marp jornada-azure-ml-studio.md --theme themes/intelequia.css --html --watch --server"
   },
   "devDependencies": {
     "@marp-team/marp-cli": "^4.0.0"

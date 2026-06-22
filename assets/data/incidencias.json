@@ -1,0 +1,26 @@
+[
+  {
+    "id": "INC-2026-001",
+    "severity": "critica",
+    "status": "abierta",
+    "summary": "Caida de telemetria en 24 estaciones de Canarias",
+    "owner_team": "operaciones",
+    "opened_at": "2026-06-10T08:15:00Z"
+  },
+  {
+    "id": "INC-2026-002",
+    "severity": "alta",
+    "status": "abierta",
+    "summary": "Degradacion intermitente en pagos de recarga electrica",
+    "owner_team": "pagos",
+    "opened_at": "2026-06-10T09:40:00Z"
+  },
+  {
+    "id": "INC-2026-003",
+    "severity": "media",
+    "status": "cerrada",
+    "summary": "Retraso en sincronizacion de inventario de lubricantes",
+    "owner_team": "datos",
+    "opened_at": "2026-06-09T16:20:00Z"
+  }
+]

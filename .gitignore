@@ -1,5 +1,5 @@
 assets/.DS_Store
 .DS_Store
 slides/node_modules
-
-slides/dist/~$jornada-1-fabric.pptx
+slides/dist/*.html
+slides/dist/~$*.pptx

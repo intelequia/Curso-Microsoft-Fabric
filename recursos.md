@@ -1,83 +1,59 @@
-# Recursos y bibliografía oficial
+# Recursos oficiales
 
-> Lista curada de la documentación oficial y recursos complementarios para profundizar tras el curso. Todo lo enlazado es de Microsoft Learn o blogs oficiales del producto.
+## IA y ML en Azure
 
-## Microsoft Fabric
+- [AI learning hub](https://learn.microsoft.com/en-us/ai/)
+- [Overview of Microsoft Machine Learning Products and Technologies](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/data-science-and-machine-learning)
 
-- Documentación general: <https://learn.microsoft.com/fabric/>
-- Roadmap público: <https://learn.microsoft.com/fabric/release-plan/>
-- Pricing y SKUs (F2–F2048): <https://learn.microsoft.com/fabric/enterprise/licenses>
-- OneLake: <https://learn.microsoft.com/fabric/onelake/onelake-overview>
-- Direct Lake: <https://learn.microsoft.com/fabric/get-started/direct-lake-overview>
-- Mirroring: <https://learn.microsoft.com/fabric/database/mirrored-database/overview>
-- Real-Time Intelligence (Eventhouse / KQL): <https://learn.microsoft.com/fabric/real-time-intelligence/>
-- Activator (Reflex): <https://learn.microsoft.com/fabric/real-time-intelligence/data-activator/activator-introduction>
-- Data Engineering / Spark: <https://learn.microsoft.com/fabric/data-engineering/>
-- Warehouse: <https://learn.microsoft.com/fabric/data-warehouse/>
-- Power BI in Fabric: <https://learn.microsoft.com/power-bi/>
-- Git integration y deployment pipelines: <https://learn.microsoft.com/fabric/cicd/>
-- Capacity admin & monitoring: <https://learn.microsoft.com/fabric/enterprise/metrics-app>
+## Microsoft Foundry
 
-## Microsoft Purview
+- [Microsoft Foundry documentation](https://learn.microsoft.com/en-us/azure/foundry/)
+- [What is Microsoft Foundry](https://learn.microsoft.com/en-us/azure/foundry/what-is-foundry)
+- [Microsoft Foundry portal](https://ai.azure.com)
+- [Region support](https://learn.microsoft.com/en-us/azure/foundry/reference/region-support)
+- [Foundry SDKs and endpoints](https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview)
 
-- Portal: <https://purview.microsoft.com>
-- Documentación general: <https://learn.microsoft.com/purview/>
-- Data Map: <https://learn.microsoft.com/purview/concept-data-map>
-- Unified Catalog y Data Products: <https://learn.microsoft.com/purview/concept-data-products>
-- Information Protection (sensitivity labels): <https://learn.microsoft.com/purview/information-protection>
-- Auto-labeling y SIT: <https://learn.microsoft.com/purview/sensitivity-labels-aip>
-- Data Loss Prevention (DLP): <https://learn.microsoft.com/purview/dlp-learn-about-dlp>
-- DLP for Power BI / Fabric: <https://learn.microsoft.com/power-bi/enterprise/service-security-dlp-policies-for-power-bi-overview>
-- Insider Risk Management: <https://learn.microsoft.com/purview/insider-risk-management>
-- Compliance Manager: <https://learn.microsoft.com/purview/compliance-manager>
-- Microsoft Purview hub for Fabric: <https://learn.microsoft.com/fabric/governance/microsoft-purview-fabric>
-- Data Quality: <https://learn.microsoft.com/purview/data-quality-overview>
-- Data Access Policies: <https://learn.microsoft.com/purview/concept-policies-data-owner>
+## Modelos y endpoints
 
-## Data agents, Copilot y workload Fabric IQ
+- [Foundry Models overview](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/)
+- [Foundry Models quotas and limits](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/quotas-limits)
+- [Choose the right AI model](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/choose-ai-model)
+- [Explore Foundry Models in Azure Machine Learning](https://learn.microsoft.com/en-us/azure/machine-learning/foundry-models-overview?view=azureml-api-2)
+- [What is Azure Machine Learning](https://learn.microsoft.com/en-us/azure/machine-learning/overview-what-is-azure-machine-learning?view=azureml-api-2)
 
-- Data agent en Fabric: <https://learn.microsoft.com/fabric/data-science/concept-data-agent>
-- Copilot in Fabric (visión general): <https://learn.microsoft.com/fabric/get-started/copilot-fabric-overview>
-- Responsible AI en Fabric: <https://learn.microsoft.com/fabric/get-started/copilot-privacy-security>
-- Workload **Fabric IQ (preview)** · Ontology, Graph, Plan, Operations agent · consultar el portal de documentación de Fabric en <https://learn.microsoft.com/fabric/> y el blog oficial. Disponibilidad sujeta a tenant y región.
+## Azure Machine Learning Studio
 
-## Identidad, seguridad y red
+- [Azure Machine Learning documentation](https://learn.microsoft.com/en-us/azure/machine-learning/)
+- [Azure Machine Learning studio](https://ml.azure.com)
+- [Workspaces](https://learn.microsoft.com/en-us/azure/machine-learning/concept-workspace?view=azureml-api-2)
+- [Compute targets](https://learn.microsoft.com/en-us/azure/machine-learning/concept-compute-target?view=azureml-api-2)
+- [Jobs](https://learn.microsoft.com/en-us/azure/machine-learning/concept-jobs?view=azureml-api-2)
+- [MLflow and Azure Machine Learning](https://learn.microsoft.com/en-us/azure/machine-learning/concept-mlflow?view=azureml-api-2)
+- [Managed online endpoints](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-online?view=azureml-api-2)
+- [Batch endpoints](https://learn.microsoft.com/en-us/azure/machine-learning/concept-endpoints-batch?view=azureml-api-2)
 
-- Microsoft Entra ID: <https://learn.microsoft.com/entra/>
-- Conditional Access para Fabric: <https://learn.microsoft.com/power-bi/enterprise/service-security-data-loss-prevention-overview>
-- Private Link para Fabric: <https://learn.microsoft.com/fabric/security/security-private-links-overview>
-- Network communication requirements: <https://learn.microsoft.com/power-bi/enterprise/power-bi-allow-list-urls>
+## Fabric y Azure ML
 
-## Comunidad y eventos
+- [What is Microsoft Fabric](https://learn.microsoft.com/en-us/fabric/fundamentals/microsoft-fabric-overview)
+- [Use datastores with OneLake](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-datastore?view=azureml-api-2)
+- [Use Fabric to access model deployment batch endpoints](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-use-batch-fabric?view=azureml-api-2)
+- [Azure Machine Learning activity in Fabric Data Factory](https://learn.microsoft.com/en-us/fabric/data-factory/azure-machine-learning-activity)
 
-- Microsoft Fabric Community: <https://community.fabric.microsoft.com/>
-- Microsoft Fabric blog: <https://blog.fabric.microsoft.com/>
-- Microsoft Reactor (eventos): <https://developer.microsoft.com/reactor/>
-- Global AI / Global Azure (comunidades en las que participo): <https://globalai.community/> · <https://globalazure.net/>
+## Agents
 
-## Libros y formación complementaria
+- [Foundry Agent Service overview](https://learn.microsoft.com/en-us/azure/foundry/agents/overview)
+- [Agent tools overview](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/tool-catalog)
+- [Foundry IQ](https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/what-is-foundry-iq)
+- [Connect agents to Foundry IQ knowledge bases](https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/foundry-iq-connect)
 
-- Microsoft Press · "Fabric for Data Engineers / Analysts" (serie 2024–2025).
-- *Microsoft Power BI Cookbook* (Brett Powell · Packt).
-- *DAX in 2 minutes* y vídeos de SQLBI: <https://www.sqlbi.com/>
+## Evaluación, observabilidad y seguridad
 
-## Aprendizaje guiado en Microsoft Learn
+- [Observability in Generative AI](https://learn.microsoft.com/en-us/azure/foundry/concepts/observability)
+- [Baseline Microsoft Foundry Chat Reference Architecture](https://learn.microsoft.com/en-us/azure/architecture/ai-ml/architecture/baseline-microsoft-foundry-chat)
+- [Responsible AI for Microsoft Foundry](https://learn.microsoft.com/en-us/azure/foundry/responsible-ai/)
 
-- Learning Path "Implement a data lakehouse in Microsoft Fabric": <https://learn.microsoft.com/training/paths/implement-lakehouse-microsoft-fabric/>
-- Learning Path "Get started with Microsoft Purview Data Governance": <https://learn.microsoft.com/training/paths/microsoft-purview-data-governance/>
-- Learning Path "Implement information protection in Microsoft 365": <https://learn.microsoft.com/training/paths/implement-information-protection-microsoft-365/>
+## Migración y compatibilidad
 
-## Certificaciones recomendadas
+- [Migrate from Prompt Flow to Microsoft Agent Framework](https://learn.microsoft.com/en-us/azure/foundry-classic/how-to/prompt-flow-migration-overview)
 
-- **DP-600** · Implementing Analytics Solutions Using Microsoft Fabric.
-- **DP-700** · Implementing Data Engineering Solutions Using Microsoft Fabric.
-- **SC-401** · Information Security Administrator (sustituye a SC-400).
-- **SC-100** · Microsoft Cybersecurity Architect.
-
----
-
-## Soporte tras el curso
-
-- Canal Teams del curso (activo 2 semanas).
-- Office hours: 1 sesión a los 15 días.
-- Para dudas técnicas concretas, abrir caso en el portal de Microsoft (a través del tenant del cliente).
+> Nota: Prompt Flow se mantiene como contenido classic/legacy. Para nuevos desarrollos, este curso prioriza Foundry Agent Service y Microsoft Agent Framework.
